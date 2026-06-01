@@ -127,6 +127,38 @@ body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-s
   .af.on { background:#FDCE06 !important; color:#000 !important; }
   .aitem-nota { background:rgba(239,175,50,.1) !important; color:rgba(239,175,50,.85) !important; }
 }
+
+/* ── PINS ─────────────────────────────────────────── */
+.pin-wrap{position:relative;display:block}
+.pin{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:10;transition:.15s}
+.pin-dot{width:30px;height:30px;border-radius:50%;background:rgba(253,206,6,.92);border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+  font-size:11px;font-weight:800;color:#000;
+  animation:pin-pulse 2.5s ease-in-out infinite}
+.pin:active .pin-dot{transform:scale(.9)}
+.pin-dot.imp{background:rgba(253,206,6,1);box-shadow:0 0 0 4px rgba(253,206,6,.3),0 2px 8px rgba(0,0,0,.5)}
+@keyframes pin-pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(253,206,6,.5),0 2px 8px rgba(0,0,0,.5)}
+  50%{box-shadow:0 0 0 6px rgba(253,206,6,0),0 2px 8px rgba(0,0,0,.5)}}
+
+/* ── POPUP DO PIN ──────────────────────────────────── */
+.pin-popup{position:fixed;inset:0;z-index:999;display:flex;align-items:flex-end;padding:0}
+.pin-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.pin-sheet{position:relative;z-index:1;width:100%;background:#1a1a1a;border-radius:20px 20px 0 0;
+  padding:20px 20px 40px;animation:slide-up .25s ease-out}
+@keyframes slide-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pin-sheet-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 16px}
+.pin-sheet-num{font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.35);margin-bottom:4px}
+.pin-sheet-name{font-size:18px;font-weight:800;line-height:1.3;margin-bottom:8px;letter-spacing:-.3px}
+.pin-sheet-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pin-sheet-nota{font-size:13px;color:rgba(239,175,50,.85);background:rgba(239,175,50,.1);
+  border-left:2px solid rgba(239,175,50,.4);padding:8px 12px;border-radius:0 8px 8px 0;
+  font-style:italic;margin-top:6px}
+.pin-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:none;color:#fff;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+
 </style>
 </head>
 <body>
@@ -178,7 +210,7 @@ body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-s
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
     <span id="lbl-back">Percurso</span>
   </div>
-  <div class="det-img-wrap">
+  <div class="det-img-wrap pin-wrap">
     <img id="det-img" class="det-img" src="" alt="" loading="lazy">
     <div class="det-img-label" id="det-img-label"></div>
   </div>
@@ -353,6 +385,7 @@ function renderCards(){
 function showDetail(idx){
   curChIdx=idx; const ch=CHAPTERS[idx];
   document.getElementById('det-img').src=ch.img;
+  setTimeout(()=>renderPins(ch.id),50);
   document.getElementById('det-img-label').textContent=L(ch.title)+(ch.years?' · '+ch.years:'');
   document.getElementById('det-ato').textContent=L(ch.tag)+(ch.years?' · '+ch.years:'');
   document.getElementById('det-title').textContent=L(ch.title);
@@ -459,10 +492,69 @@ function renderItem(i){
   </div>`;
 }
 
+
+/* ── PINS DATA ──────────────────────────────────────── */
+const PIN_MAP = {"entrada": [], "p02": [{"id": 5, "x": 72, "y": 75, "name": "Santinho autografado pelo Zico", "ano": 1993, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 6, "x": 82, "y": 60, "name": "Troféu 'Fato do Ano 93' — Cruzeiro", "ano": 1993, "col": "R", "imp": true, "ok": true, "nota": "ÚNICO NO MUNDO"}, {"id": 1, "x": 38, "y": 62, "name": "Medalha Artilheiro — Campeonato Metropolitano", "ano": 1990, "col": "R", "imp": false, "ok": true, "nota": null}, {"id": 3, "x": 82, "y": 22, "name": "Medalha 2° Artilheiro Infantil — São Cristóvão", "ano": 1991, "col": "R", "imp": false, "ok": true, "nota": null}, {"id": 7, "x": 55, "y": 55, "name": "Medalha Recopa Sudamericana — Cruzeiro", "ano": 1993, "col": "R", "imp": false, "ok": true, "nota": null}], "p03": [{"id": 8, "x": 28, "y": 18, "name": "Medalha Ouro Copa do Mundo 1994 — Tetra", "ano": 1994, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 10, "x": 68, "y": 72, "name": "Kit Nike PSV + card ídolo Zico", "ano": 1994, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 14, "x": 52, "y": 22, "name": "Camisa Barcelona Titular 96–97 Kappa — Blaugrana", "ano": 1996, "col": "R", "imp": true, "ok": true, "nota": "⚠ Catalogada como Away — é TITULAR. Conexão: ids 17/19/20"}, {"id": 16, "x": 78, "y": 18, "name": "FIFA World Player of the Year 1996", "ano": 1996, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 25, "x": 20, "y": 60, "name": "Medalha Prata Copa 1998 — Paris", "ano": 1998, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 31, "x": 28, "y": 55, "name": "FIFA World Player 2002 — nome RONALDO gravado", "ano": 2002, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 22, "x": 84, "y": 52, "name": "Medalha Copa das Confederações 1997", "ano": 1997, "col": "R", "imp": false, "ok": true, "nota": null}, {"id": 23, "x": 40, "y": 35, "name": "Camisa Inter de Milão emoldurada", "ano": 1997, "col": "R", "imp": false, "ok": true, "nota": null}, {"id": 24, "x": 65, "y": 50, "name": "Medalha UEFA Cup — Inter de Milão", "ano": 1997, "col": "R", "imp": false, "ok": true, "nota": null}, {"id": 30, "x": 55, "y": 40, "name": "Réplica FIFA Copa 2002 — exclusiva jogadores", "ano": 2002, "col": "R", "imp": false, "ok": true, "nota": null}], "p05": [{"id": 38, "x": 35, "y": 70, "name": "Trofeo EFE — Melhor Ibero-americano 2002–03", "ano": 2003, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 39, "x": 68, "y": 22, "name": "Camisas Real Madrid autografadas (cinza + preta)", "ano": 2003, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 40, "x": 78, "y": 55, "name": "Nike R9 Laranja/Preto autografada", "ano": 2003, "col": "R", "imp": true, "ok": true, "nota": null}, {"id": 45, "x": 30, "y": 45, "name": "Nike Tiempo Legend R9 Preto/Amarelo — filhos bordados", "ano": 2009, "col": "R", "imp": true, "ok": true, "nota": "PAR ÚNICO — Ronald + Maria Sophia"}, {"id": 46, "x": 70, "y": 65, "name": "Nike Tiempo Legend III Roxo/Laranja — Corinthians", "ano": 2010, "col": "R", "imp": true, "ok": true, "nota": "PAR ÚNICO — Ronald + Maria Sophia"}, {"id": 44, "x": 55, "y": 35, "name": "Faixa Campeão Paulistão 2009 — Corinthians invicto", "ano": 2009, "col": "R", "imp": false, "ok": true, "nota": null}], "p06": [{"id": 52, "x": 25, "y": 50, "name": "Troféu Pres Service — Artilheiro Mineiro 1994", "ano": 1994, "col": "Rn", "imp": true, "ok": true, "nota": null}, {"id": 53, "x": 65, "y": 30, "name": "Atleta do Centenário — Sec. Municipal Esportes", "ano": 1994, "col": "Rn", "imp": false, "ok": false, "nota": null}, {"id": 55, "x": 78, "y": 70, "name": "Homenagem Centro de Futebol — Lisboa 1996", "ano": 1996, "col": "Rn", "imp": false, "ok": true, "nota": null}], "p07": [{"id": 62, "x": 45, "y": 40, "name": "Tuttosport — Placa Comemorativa Edição Nº 1", "ano": 1998, "col": "Rn", "imp": false, "ok": true, "nota": null}, {"id": 66, "x": 75, "y": 55, "name": "IstoÉ — Brasileiro do Ano 2002", "ano": 2002, "col": "Rn", "imp": false, "ok": false, "nota": null}], "p08": []};
+
+function renderPins(chapterId) {
+  const wrap = document.querySelector('.pin-wrap');
+  if (!wrap) return;
+  wrap.querySelectorAll('.pin').forEach(p => p.remove());
+  
+  const pins = PIN_MAP[chapterId] || [];
+  pins.forEach((pin, i) => {
+    const el = document.createElement('div');
+    el.className = 'pin';
+    el.style.left = pin.x + '%';
+    el.style.top  = pin.y + '%';
+    el.innerHTML = `<div class="pin-dot${pin.imp ? ' imp' : ''}">${i+1}</div>`;
+    el.onclick = (e) => { e.stopPropagation(); openPin(pin, i+1); };
+    wrap.appendChild(el);
+  });
+}
+
+function openPin(pin, num) {
+  const popup = document.getElementById('pin-popup');
+  document.getElementById('pin-num').textContent = 'PEÇA Nº' + String(pin.id).padStart(3,'0');
+  document.getElementById('pin-name').textContent = pin.name;
+  
+  const tags = [];
+  if (pin.imp) tags.push('<span style="background:rgba(253,206,6,.2);color:#FDCE06;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">⭐ DESTAQUE</span>');
+  if (pin.ano) tags.push('<span style="font-size:11px;color:rgba(255,255,255,.45)">'+pin.ano+'</span>');
+  tags.push('<span style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">'+
+    (pin.col==='R'?'Coleção Ronaldo':'Coleção Ronald')+'</span>');
+  if (!pin.ok) tags.push('<span style="background:rgba(255,150,0,.15);color:rgba(255,150,0,.85);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">⊘ Não exibindo</span>');
+  document.getElementById('pin-meta').innerHTML = tags.join('');
+  
+  document.getElementById('pin-nota').innerHTML = pin.nota 
+    ? '<div class="pin-sheet-nota">⚠ '+pin.nota+'</div>' : '';
+  
+  popup.style.display = 'flex';
+}
+
+function closePinPopup(e) {
+  if (e.target === e.currentTarget || e.target.classList.contains('pin-overlay')) {
+    document.getElementById('pin-popup').style.display = 'none';
+  }
+}
+
 // INIT
 renderCards();
 renderAcervo();
 setTimeout(()=>document.getElementById('splash').classList.add('hide'), 600);
 </script>
+
+<div id="pin-popup" class="pin-popup" style="display:none" onclick="closePinPopup(event)">
+  <div class="pin-overlay"></div>
+  <div class="pin-sheet">
+    <div class="pin-sheet-handle"></div>
+    <button class="pin-close" onclick="document.getElementById('pin-popup').style.display='none'">✕</button>
+    <div class="pin-sheet-num" id="pin-num"></div>
+    <div class="pin-sheet-name" id="pin-name"></div>
+    <div class="pin-sheet-meta" id="pin-meta"></div>
+    <div id="pin-nota"></div>
+  </div>
+</div>
+
 </body>
 </html>
