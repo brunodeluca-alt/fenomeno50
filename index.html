@@ -295,7 +295,7 @@ function renderList(){
   container.innerHTML = CHAPTERS.map((ch,i) => `
     <div class="card" onclick="showDetail(${i})">
       <div class="card-img-wrap">
-        <img class="card-img" src="${ch.img}" alt="${L(ch.title)}" loading="lazy">
+        <img class="card-img" src="${ch.img}" alt="${L(ch.title)}">
       </div>
       <div class="card-body">
         <div class="card-tag">
