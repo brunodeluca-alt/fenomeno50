@@ -35,7 +35,7 @@ body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-s
 /* CHAPTER CARDS */
 .card{display:block;border-bottom:1px solid var(--border);cursor:pointer;transition:.12s}
 .card:active{opacity:.7}
-.card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#1a1a1a}
+.card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#1a1a1a;min-height:80px}
 .card-body{padding:14px 16px 16px}
 .card-tag{display:flex;align-items:center;gap:8px;margin-bottom:5px}
 .card-ato{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
@@ -336,7 +336,7 @@ function renderCards(){
   const wrap=document.getElementById('cards-wrap');
   wrap.innerHTML=CHAPTERS.map((ch,i)=>`
     <div class="card" onclick="showDetail(${i})">
-      <img class="card-img" src="${ch.img}" alt="${L(ch.title)}" loading="lazy">
+      <img class="card-img" src="${ch.img}" alt="${L(ch.title)}">
       <div class="card-body">
         <div class="card-tag">
           <span class="card-ato">${L(ch.tag)}</span>
