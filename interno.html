@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0A">
+<meta name="color-scheme" content="dark">
 <title>Fenômeno 50 · Equipe Interna</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--gold:#FDCE06;--bg:#0A0A0A;--card:#141414;--muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08);--ok:#22c55e;--warn:#f59e0b;--miss:#ef4444}
-html,body{height:100%;overscroll-behavior:none}
-body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6}
+html,body{height:100%;overscroll-behavior:none;background:#0A0A0A !important;color:#fff !important}
+body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6}
 ::-webkit-scrollbar{display:none}
 
 /* HEADER */
@@ -103,6 +104,29 @@ body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFon
 #splash{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .5s}
 #splash.hide{opacity:0;pointer-events:none}
 .splash-sub{font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;font-weight:500}
+
+@media (prefers-color-scheme: light) {
+  html, body { background:#0A0A0A !important; color:#ffffff !important; }
+  .header { background:rgba(10,10,10,.96) !important; color:#fff !important; }
+  .tabs { background:#0A0A0A !important; }
+  .tab { color:rgba(255,255,255,.45) !important; }
+  .tab.on { color:#FDCE06 !important; border-bottom-color:#FDCE06 !important; }
+  .card, .aitem, .acervo-header, .det-body { background:#0A0A0A !important; color:#fff !important; }
+  .card-title, .det-title, .aitem-name { color:#ffffff !important; }
+  .card-ato, .det-ato, .agroup-title { color:#FDCE06 !important; }
+  .card-role, .det-role, .card-years, .aitem-num { color:rgba(255,255,255,.45) !important; }
+  input.search-box { background:rgba(255,255,255,.08) !important; color:#fff !important; border-color:rgba(255,255,255,.15) !important; }
+  .acervo-stats { background:rgba(255,255,255,.06) !important; }
+  .astat .l { color:rgba(255,255,255,.45) !important; }
+  .det-narrator-block { background:rgba(255,255,255,.06) !important; }
+  #splash { background:#0A0A0A !important; }
+  .det-nav-btn { border-color:rgba(255,255,255,.15) !important; color:#fff !important; background:#141414 !important; }
+  .wall-label { color:rgba(255,255,255,.45) !important; }
+  .wall-text, .wall-text p { color:rgba(255,255,255,.9) !important; }
+  .af { border-color:rgba(255,255,255,.15) !important; color:rgba(255,255,255,.5) !important; background:#141414 !important; }
+  .af.on { background:#FDCE06 !important; color:#000 !important; }
+  .aitem-nota { background:rgba(239,175,50,.1) !important; color:rgba(239,175,50,.85) !important; }
+}
 </style>
 </head>
 <body>
