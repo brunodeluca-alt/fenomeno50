@@ -5,30 +5,29 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0A">
 <title>Fenômeno 50 · Casa Rede Ronaldo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- System fonts only — zero latency, zero dependency -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--gold:#FDCE06;--blue:#1538BA;--bg:#0A0A0A;--card:#141414;--text:#FFFFFF;--muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08)}
 html,body{height:100%;overscroll-behavior:none}
-body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6}
 ::-webkit-scrollbar{display:none}
 
 /* ── HEADER ── */
 .header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .header-title{display:flex;align-items:center;gap:10px}
 .header-rr{width:32px;height:auto}
-.header-name{font-family:'Anton';font-size:18px;letter-spacing:.5px}
+.header-name{font-weight:800;font-size:18px;letter-spacing:.5px}
 .header-name span{color:var(--gold)}
 .lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,.06);border-radius:8px;padding:3px}
-.lang-btn{padding:5px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);font-family:'Inter';font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:.15s}
+.lang-btn{padding:5px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:.15s}
 .lang-btn.active{background:var(--gold);color:#000}
 
 /* ── LIST VIEW ── */
 #view-list{min-height:100vh;padding-bottom:40px}
 .list-hero{padding:28px 20px 12px;border-bottom:1px solid var(--border)}
 .list-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
-.list-title{font-family:'Anton';font-size:32px;line-height:1.1;margin-bottom:4px}
+.list-title{font-weight:900;font-size:32px;line-height:1.1;margin-bottom:4px;letter-spacing:-.5px}
 .list-sub{font-size:13px;color:var(--muted)}
 .list-meta{display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
 .list-meta span{display:flex;align-items:center;gap:4px}
@@ -43,7 +42,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .card-tag{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .card-ato{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
 .card-years{font-size:10px;color:var(--muted);letter-spacing:.3px}
-.card-title{font-family:'Anton';font-size:22px;line-height:1.15;margin-bottom:8px}
+.card-title{font-weight:800;font-size:22px;line-height:1.2;margin-bottom:8px;letter-spacing:-.3px}
 .card-narrator{display:flex;align-items:center;gap:8px}
 .card-narrator-name{font-size:13px;font-weight:600;color:var(--gold)}
 .card-narrator-role{font-size:12px;color:var(--muted)}
@@ -61,14 +60,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .detail-tag{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .detail-ato{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold)}
 .detail-years{font-size:11px;color:var(--muted)}
-.detail-title{font-family:'Anton';font-size:30px;line-height:1.1;margin-bottom:14px}
+.detail-title{font-weight:900;font-size:30px;line-height:1.1;margin-bottom:14px;letter-spacing:-.5px}
 .detail-narrator-block{background:rgba(255,255,255,.04);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:24px}
 .detail-narrator-name{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:2px}
 .detail-narrator-role{font-size:12px;color:var(--muted)}
 .detail-letter-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .detail-letter-label::before{content:'';display:block;width:24px;height:1px;background:var(--muted)}
-.detail-text{font-size:16px;line-height:1.75;color:rgba(255,255,255,.88)}
-.detail-text p{margin-bottom:18px}
+.detail-text{font-size:17px;line-height:1.8;color:rgba(255,255,255,.9)}
+.detail-text p{margin-bottom:20px;font-weight:400}
 .detail-text p:last-child{margin-bottom:0}
 .detail-nav{display:flex;gap:8px;padding:20px 20px 0;border-top:1px solid var(--border);margin-top:32px}
 .detail-nav-btn{flex:1;padding:14px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:.15s;text-align:center}
@@ -178,7 +177,7 @@ const CHAPTERS = [
    tag:{pt:'FACHADA',en:'ENTRANCE',es:'ENTRADA'},years:'',
    title:{pt:'A Entrada',en:'The Entrance',es:'La Entrada'},
    narrator:{pt:'Marcos Uchôa',en:'Marcos Uchôa',es:'Marcos Uchôa'},
-   role:{pt:'Jornalista · ESPN',en:'Journalist · ESPN',es:'Periodista · ESPN'},
+   role:{pt:'Jornalista · Veja Mais',en:'Journalist · Veja Mais',es:'Periodista · Veja Mais'},
    text:{
     pt:'Ronaldinho. Ronaldo. Fenômeno.\n\nComo uma carreira se transforma tanto assim?\n\nDe ser tratado de forma carinhosa a virar algo sinônimo de uma força da natureza?\n\nTodos nós vamos aprendendo muito sobre como defini-lo. Às vezes parece que as palavras não conseguem acompanhar a grandeza da história. Porque toda vez que você acha que tem uma boa definição, uma boa imagem, uma boa frase pra resumir o que foi Ronaldo — aparece uma nova cena que faz tudo parecer pequeno.\n\nRonaldo jogou bola como se a gravidade fosse opcional. Como se os defensores fossem obstáculos de outro esporte. E fez isso carregando um peso que ninguém via: lesões que encerrariam carreiras de qualquer outro. Voltas que pareciam milagre mas eram, na verdade, teimosia pura.\n\nEu cobri Copa do Mundo. Vi Pelé em foto, Maradona ao vivo. Vi Messi virar o maior de todos. Mas de Ronaldo eu guardo algo diferente: a sensação de que o jogo nunca seria suficiente pra ele.\n\nBem-vindo à história do maior artilheiro de Copas do Mundo da história. Bem-vindo à história do Fenômeno.',
     en:'Ronaldinho. Ronaldo. Phenomenon.\n\nHow does a career transform so much?\n\nFrom a nickname given with warmth to something synonymous with a force of nature?\n\nAll of us have struggled to define him. Sometimes words cannot keep up with the magnitude of the story. Because every time you think you have the right phrase to sum up what Ronaldo was — a new scene appears that makes everything else seem small.\n\nRonaldo played football as if gravity were optional. As if defenders were obstacles from a different sport. And he did it carrying a weight no one could see: injuries that would have ended any other career. Comebacks that looked like miracles but were, in truth, pure stubbornness.\n\nI covered World Cups. I saw Pelé in photos, Maradona live. I watched Messi become the greatest of all. But with Ronaldo I hold something different: the feeling that the game was never enough for him.\n\nWelcome to the story of the greatest World Cup scorer in history. Welcome to the story of the Phenomenon.',
