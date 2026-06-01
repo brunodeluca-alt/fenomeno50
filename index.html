@@ -2,1136 +2,353 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#06081F">
-<title>Casa Rede Ronaldo · Fenômeno 50</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>Fenômeno 50 · Casa Rede Ronaldo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;500;600;700&family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --blue:#2226FF; --blue-deep:#06081F; --blue-mid:#0E1463; --blue-soft:#161C7A;
-  --gold:#FDD306; --orange:#FF4700; --white:#fff;
-  --ink:#EAE8FF;
-  --t:cubic-bezier(.22,1,.36,1);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--blue-deep);font-family:'Rajdhani',sans-serif;color:#fff}
-body{position:fixed;inset:0;overscroll-behavior:none}
-img{display:block;max-width:100%}
-::-webkit-scrollbar{width:0;height:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--gold:#FDCE06;--blue:#1538BA;--bg:#0A0A0A;--card:#141414;--text:#FFFFFF;--muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08)}
+html,body{height:100%;overscroll-behavior:none}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6}
+::-webkit-scrollbar{display:none}
 
-/* ─── APP SHELL ─────────────────────────────────────────── */
-#app{position:absolute;inset:0;display:flex;flex-direction:column}
-.viewport{flex:1;position:relative;overflow:hidden}
-.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;padding-bottom:96px;
-  opacity:0;visibility:hidden;transform:translateY(8px);
-  transition:opacity .45s var(--t),transform .45s var(--t),visibility .45s}
-.screen.active{opacity:1;visibility:visible;transform:none}
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.header-title{display:flex;align-items:center;gap:10px}
+.header-rr{width:32px;height:auto}
+.header-name{font-family:'Anton';font-size:18px;letter-spacing:.5px}
+.header-name span{color:var(--gold)}
+.lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,.06);border-radius:8px;padding:3px}
+.lang-btn{padding:5px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);font-family:'Inter';font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:.15s}
+.lang-btn.active{background:var(--gold);color:#000}
 
-/* background ambience */
-.ambient{position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:
-    radial-gradient(120% 80% at 50% -10%, #1A1F8F 0%, #0A0E45 45%, #06081F 100%);}
-.ambient::after{content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(115deg,transparent 0 38px,rgba(34,38,255,.05) 38px 40px);
-  opacity:.6}
-.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.04;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* ── LIST VIEW ── */
+#view-list{min-height:100vh;padding-bottom:40px}
+.list-hero{padding:28px 20px 12px;border-bottom:1px solid var(--border)}
+.list-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.list-title{font-family:'Anton';font-size:32px;line-height:1.1;margin-bottom:4px}
+.list-sub{font-size:13px;color:var(--muted)}
+.list-meta{display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
+.list-meta span{display:flex;align-items:center;gap:4px}
 
-/* ─── TOP BAR ───────────────────────────────────────────── */
-.topbar{position:absolute;top:0;left:0;right:0;z-index:40;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:max(14px,env(safe-area-inset-top)) 18px 14px;
-  background:linear-gradient(180deg,rgba(6,8,31,.92) 0%,rgba(6,8,31,.5) 70%,transparent 100%);
-  pointer-events:none}
-.topbar .brand{display:flex;align-items:center;gap:10px;pointer-events:auto}
-.topbar .rr{width:36px;height:30px;flex-shrink:0}
-.topbar .bt{line-height:1}
-.topbar .bt b{font-family:'Archivo';font-weight:900;font-size:14px;letter-spacing:.3px;display:block}
-.topbar .bt b .y{color:var(--gold)}
-.topbar .bt span{font-size:8.5px;letter-spacing:2.5px;color:rgba(255,255,255,.55);font-weight:600}
-.langs{display:flex;gap:5px;pointer-events:auto;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;backdrop-filter:blur(12px)}
-.lang{border:none;background:transparent;color:rgba(255,255,255,.5);font-family:'Archivo';
-  font-weight:800;font-size:10px;letter-spacing:.5px;padding:5px 9px;border-radius:16px;cursor:pointer;transition:.3s}
-.lang.active{background:var(--gold);color:#06081F}
+/* ── CHAPTER CARD ── */
+.card{display:block;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer;transition:.12s;text-decoration:none;color:inherit}
+.card:active{opacity:.75}
+.card-img-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#1a1a1a}
+.card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.card:active .card-img{transform:scale(1.03)}
+.card-body{padding:16px 20px 20px}
+.card-tag{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.card-ato{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
+.card-years{font-size:10px;color:var(--muted);letter-spacing:.3px}
+.card-title{font-family:'Anton';font-size:22px;line-height:1.15;margin-bottom:8px}
+.card-narrator{display:flex;align-items:center;gap:8px}
+.card-narrator-name{font-size:13px;font-weight:600;color:var(--gold)}
+.card-narrator-role{font-size:12px;color:var(--muted)}
+.card-arrow{margin-left:auto;color:var(--muted);font-size:18px;flex-shrink:0}
 
-/* ─── BOTTOM NAV ────────────────────────────────────────── */
-.navbar{position:absolute;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:50;
-  display:flex;background:rgba(13,18,70,.6);backdrop-filter:blur(28px) saturate(1.4);
-  border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:7px;gap:4px;
-  box-shadow:0 14px 44px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14)}
-.nav{flex:1;border:none;background:transparent;color:rgba(255,255,255,.55);
-  display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 6px;
-  border-radius:19px;cursor:pointer;transition:.35s var(--t);position:relative}
-.nav .nic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px}
-.nav .nic svg{width:22px;height:22px}
-.nav .nlb{font-family:'Archivo';font-weight:800;font-size:9.5px;letter-spacing:.6px}
-.nav.active{color:#06081F;background:linear-gradient(135deg,var(--gold),#FFB800)}
-.nav.active .nic svg{stroke:#06081F}
+/* ── DETAIL VIEW ── */
+#view-detail{display:none;min-height:100vh;padding-bottom:60px}
+.detail-back{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:.15s}
+.detail-back:active{color:#fff}
+.detail-back svg{width:16px;height:16px}
+.detail-img-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#1a1a1a}
+.detail-img{width:100%;height:100%;object-fit:cover;display:block}
+.detail-img-label{position:absolute;bottom:0;left:0;right:0;padding:16px 20px 12px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-family:'Anton';font-size:16px}
+.detail-body{padding:24px 20px}
+.detail-tag{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.detail-ato{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold)}
+.detail-years{font-size:11px;color:var(--muted)}
+.detail-title{font-family:'Anton';font-size:30px;line-height:1.1;margin-bottom:14px}
+.detail-narrator-block{background:rgba(255,255,255,.04);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:24px}
+.detail-narrator-name{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.detail-narrator-role{font-size:12px;color:var(--muted)}
+.detail-letter-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.detail-letter-label::before{content:'';display:block;width:24px;height:1px;background:var(--muted)}
+.detail-text{font-size:16px;line-height:1.75;color:rgba(255,255,255,.88)}
+.detail-text p{margin-bottom:18px}
+.detail-text p:last-child{margin-bottom:0}
+.detail-nav{display:flex;gap:8px;padding:20px 20px 0;border-top:1px solid var(--border);margin-top:32px}
+.detail-nav-btn{flex:1;padding:14px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:.15s;text-align:center}
+.detail-nav-btn:active{background:rgba(255,255,255,.08)}
+.detail-nav-btn:disabled{opacity:.25;cursor:default}
+.detail-nav-btn span{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-bottom:2px}
 
-/* ─── HOME ──────────────────────────────────────────────── */
-.hero{position:relative;height:88vh;min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:0 20px 28px;overflow:hidden}
-.hero-pan{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-pan img{position:absolute;top:50%;left:0;height:84%;width:auto;max-width:none;transform-origin:left center;
-  transform:translate(0,-50%);transition:transform 1.7s cubic-bezier(.4,0,.2,1);will-change:transform}
-.hero-pan::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,8,31,.45) 0%,rgba(6,8,31,.05) 26%,rgba(6,8,31,.35) 58%,rgba(6,8,31,.97) 100%)}
-.hero-era{position:absolute;top:max(82px,calc(env(safe-area-inset-top) + 68px));left:20px;z-index:3;
-  display:flex;align-items:center;gap:9px;background:rgba(6,8,31,.55);backdrop-filter:blur(12px);
-  border:1px solid rgba(253,211,6,.35);border-radius:30px;padding:7px 14px 7px 11px;
-  opacity:0;transform:translateY(-6px);transition:opacity .6s,transform .6s}
-.hero-era.show{opacity:1;transform:none}
-.hero-era .yr{font-family:'Anton';font-size:16px;color:var(--gold);line-height:1}
-.hero-era .club{font-family:'Archivo';font-weight:800;font-size:12px;letter-spacing:.4px}
-.hero-dots{display:flex;gap:6px;margin-top:18px}
-.hero-dots .d{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:.5s var(--t)}
-.hero-dots .d.on{background:var(--gold);width:22px;border-radius:6px}
-.hero-inner{position:relative;z-index:2}
-.hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Archivo';font-weight:800;
-  font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:14px;
-  border:1px solid rgba(253,211,6,.4);padding:7px 14px;border-radius:30px;background:rgba(253,211,6,.08)}
-.hero h1{font-family:'Anton';font-size:clamp(54px,17vw,82px);line-height:.82;letter-spacing:.5px;
-  text-transform:uppercase;text-shadow:0 8px 40px rgba(0,0,0,.6)}
-.hero h1 .y{color:var(--gold)}
-.hero .sub{font-family:'Archivo';font-weight:700;font-size:13px;letter-spacing:1px;
-  color:rgba(255,255,255,.8);margin-top:12px}
-.hero .scroll-hint{display:flex;align-items:center;gap:8px;margin-top:24px;
-  font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase}
-.hero .scroll-hint .dot{width:22px;height:34px;border:2px solid rgba(255,255,255,.4);border-radius:12px;
-  position:relative;flex-shrink:0}
-.hero .scroll-hint .dot::after{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
-  width:3px;height:7px;background:var(--gold);border-radius:2px;animation:scrolldot 1.6s var(--t) infinite}
-@keyframes scrolldot{0%{opacity:0;transform:translate(-50%,0)}40%{opacity:1}80%{opacity:0;transform:translate(-50%,10px)}}
+/* ── LOGO RR SVG ── */
+.rr-logo svg{width:32px;height:auto;display:block}
 
-/* stats band */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:26px 20px 6px;position:relative;z-index:2}
-.stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;
-  padding:16px 8px;text-align:center;backdrop-filter:blur(10px)}
-.stat b{display:block;font-family:'Anton';font-size:30px;color:var(--gold);line-height:1}
-.stat span{font-size:10.5px;letter-spacing:.5px;color:rgba(255,255,255,.7);font-weight:600;margin-top:4px;display:block}
-
-/* section heading */
-.sec{padding:30px 20px 4px}
-.sec .kick{font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:3px;color:var(--gold)}
-.sec h2{font-family:'Anton';font-size:30px;letter-spacing:.5px;text-transform:uppercase;margin-top:5px;line-height:1}
-.sec p{font-size:13px;color:rgba(255,255,255,.6);margin-top:5px;font-weight:500}
-
-/* quote card (Uchôa) */
-.quote-card{margin:16px 20px 0;padding:22px 20px;border-radius:22px;position:relative;overflow:hidden;
-  background:linear-gradient(135deg,rgba(34,38,255,.3),rgba(13,18,70,.5));
-  border:1px solid rgba(255,255,255,.12)}
-.quote-card .qm{font-family:'Anton';font-size:54px;color:var(--gold);line-height:.5;opacity:.5}
-.quote-card p{font-size:15px;line-height:1.55;font-weight:500;font-style:italic;color:rgba(255,255,255,.92);margin:6px 0 14px}
-.quote-card .by{display:flex;align-items:center;gap:10px}
-.quote-card .by .av{width:40px;height:40px;border-radius:50%;background:var(--gold);
-  display:flex;align-items:center;justify-content:center;font-family:'Anton';color:#06081F;font-size:18px;flex-shrink:0}
-.quote-card .by b{font-family:'Archivo';font-weight:800;font-size:13px}
-.quote-card .by span{font-size:11px;color:rgba(255,255,255,.6);display:block}
-
-/* journey rail (home preview) */
-.rail{display:flex;gap:14px;overflow-x:auto;padding:16px 20px 8px;scroll-snap-type:x mandatory}
-.rail::-webkit-scrollbar{display:none}
-.rcard{flex:0 0 78%;scroll-snap-align:start;border-radius:22px;overflow:hidden;position:relative;
-  aspect-ratio:3/4;cursor:pointer;background:#0E1463;border:1px solid rgba(255,255,255,.1)}
-.rcard img{width:100%;height:100%;object-fit:cover}
-.rcard .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(6,8,31,.95) 100%)}
-.rcard .meta{position:absolute;left:16px;right:16px;bottom:16px;z-index:2}
-.rcard .meta .ac{font-family:'Archivo';font-weight:800;font-size:9px;letter-spacing:2px;color:var(--gold)}
-.rcard .meta h3{font-family:'Anton';font-size:24px;line-height:.95;margin-top:4px;text-transform:uppercase}
-.rcard .meta .nm{font-size:11px;color:rgba(255,255,255,.7);margin-top:5px;font-weight:600}
-.rcard .idx{position:absolute;top:14px;left:14px;z-index:2;font-family:'Anton';font-size:13px;
-  width:30px;height:30px;border-radius:50%;background:rgba(6,8,31,.7);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:var(--gold)}
-
-/* featured awards strip */
-.aw-strip{display:flex;gap:12px;overflow-x:auto;padding:16px 20px 8px;scroll-snap-type:x mandatory}
-.aw-strip::-webkit-scrollbar{display:none}
-.aw-mini{flex:0 0 140px;scroll-snap-align:start;border-radius:18px;overflow:hidden;position:relative;
-  aspect-ratio:3/4;cursor:pointer;background:#0E1463;border:1px solid rgba(255,255,255,.12)}
-.aw-mini img{width:100%;height:100%;object-fit:cover}
-.aw-mini .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,8,31,.95))}
-.aw-mini .lb{position:absolute;left:12px;right:12px;bottom:12px;z-index:2}
-.aw-mini .lb .yr{font-family:'Anton';font-size:18px;color:var(--gold);line-height:1}
-.aw-mini .lb b{font-family:'Archivo';font-weight:700;font-size:11px;display:block;margin-top:2px;line-height:1.1}
-
-/* location card */
-.loc-card{margin:18px 20px 0;border-radius:22px;overflow:hidden;
-  background:linear-gradient(135deg,var(--blue),#1418A8);position:relative;
-  border:1px solid rgba(255,255,255,.15)}
-.loc-card .stripes{position:absolute;inset:0;opacity:.12;
-  background:repeating-linear-gradient(115deg,transparent 0 22px,#fff 22px 24px)}
-.loc-card .inner{position:relative;z-index:2;padding:22px 20px}
-.loc-card .pin{width:46px;height:46px;border-radius:14px;background:var(--gold);
-  display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
-.loc-card h3{font-family:'Anton';font-size:24px;line-height:1;text-transform:uppercase}
-.loc-card .addr{font-size:13px;color:rgba(255,255,255,.85);margin-top:8px;font-weight:500;line-height:1.5}
-.loc-card .when{display:inline-block;margin-top:14px;background:rgba(6,8,31,.5);border:1px solid rgba(255,255,255,.2);
-  padding:8px 14px;border-radius:30px;font-family:'Archivo';font-weight:700;font-size:12px;letter-spacing:.5px}
-
-/* ─── JOURNEY SCREEN ────────────────────────────────────── */
-.jrn-head{padding:max(74px,calc(env(safe-area-inset-top) + 60px)) 20px 8px}
-.jrn-head .kick{font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:3px;color:var(--gold)}
-.jrn-head h1{font-family:'Anton';font-size:40px;text-transform:uppercase;line-height:.9;margin-top:6px}
-.jrn-head p{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;font-weight:500}
-.jrn-list{padding:18px 16px 0;position:relative}
-/* the vertical spine */
-.jrn-list::before{content:"";position:absolute;left:38px;top:30px;bottom:30px;width:2px;
-  background:linear-gradient(180deg,transparent,rgba(253,211,6,.5) 10%,rgba(253,211,6,.5) 90%,transparent)}
-.chap{display:flex;gap:14px;margin-bottom:18px;position:relative;cursor:pointer}
-.chap .node{flex-shrink:0;width:44px;height:44px;border-radius:50%;z-index:2;
-  background:var(--blue-deep);border:2px solid var(--gold);
-  display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:16px;color:var(--gold);
-  box-shadow:0 0 0 5px rgba(6,8,31,1)}
-.chap .body{flex:1;border-radius:20px;overflow:hidden;position:relative;background:#0E1463;
-  border:1px solid rgba(255,255,255,.1);min-height:128px;transition:.4s var(--t)}
-.chap:active .body{transform:scale(.98)}
-.chap .body img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
-.chap .body .ov{position:absolute;inset:0;background:linear-gradient(100deg,rgba(6,8,31,.92) 25%,rgba(6,8,31,.35) 100%)}
-.chap .body .ct{position:relative;z-index:2;padding:16px 16px 16px}
-.chap .body .ac{font-family:'Archivo';font-weight:800;font-size:9px;letter-spacing:2px;color:var(--gold)}
-.chap .body h3{font-family:'Anton';font-size:25px;line-height:.95;margin-top:4px;text-transform:uppercase}
-.chap .body .nm{font-size:12px;color:rgba(255,255,255,.75);margin-top:6px;font-weight:600}
-.chap .body .go{position:absolute;right:14px;bottom:14px;z-index:2;font-size:11px;color:var(--gold);
-  font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:4px}
-
-/* ─── AWARDS SCREEN ─────────────────────────────────────── */
-.aw-head{padding:max(74px,calc(env(safe-area-inset-top) + 60px)) 20px 8px}
-.aw-head .kick{font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:3px;color:var(--gold)}
-.aw-head h1{font-family:'Anton';font-size:40px;text-transform:uppercase;line-height:.9;margin-top:6px}
-.aw-head p{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;font-weight:500}
-.aw-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 16px 0}
-.aw-tile{border-radius:20px;overflow:hidden;position:relative;aspect-ratio:3/4;cursor:pointer;
-  background:#0E1463;border:1px solid rgba(255,255,255,.12);transition:.4s var(--t)}
-.aw-tile:active{transform:scale(.97)}
-.aw-tile img{width:100%;height:100%;object-fit:cover}
-.aw-tile .ph-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 50% 40%,rgba(253,211,6,.18),transparent 70%)}
-.aw-tile .ph-fallback .ic{width:62px;height:62px;opacity:.85}
-.aw-tile .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 38%,rgba(6,8,31,.96))}
-.aw-tile .star{position:absolute;top:12px;right:12px;z-index:3;font-size:14px;
-  background:rgba(6,8,31,.6);backdrop-filter:blur(8px);border-radius:30px;padding:3px 8px;letter-spacing:1px}
-.aw-tile .lb{position:absolute;left:14px;right:14px;bottom:14px;z-index:2}
-.aw-tile .lb .yr{font-family:'Anton';font-size:22px;color:var(--gold);line-height:1}
-.aw-tile .lb b{font-family:'Archivo';font-weight:800;font-size:12.5px;display:block;margin-top:3px;line-height:1.15}
-.aw-tile .lb .org{font-size:10px;color:rgba(255,255,255,.6);margin-top:3px;font-weight:500}
-
-/* ─── VISIT SCREEN ──────────────────────────────────────── */
-.vis-head{padding:max(74px,calc(env(safe-area-inset-top) + 60px)) 20px 8px}
-.vis-head .kick{font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:3px;color:var(--gold)}
-.vis-head h1{font-family:'Anton';font-size:40px;text-transform:uppercase;line-height:.9;margin-top:6px}
-.vis-hero{margin:16px 16px 0;border-radius:24px;overflow:hidden;position:relative;aspect-ratio:16/10}
-.vis-hero img{width:100%;height:100%;object-fit:cover}
-.vis-hero .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,8,31,.95))}
-.vis-hero .cap{position:absolute;left:18px;right:18px;bottom:16px;z-index:2}
-.vis-hero .cap h3{font-family:'Anton';font-size:26px;text-transform:uppercase;line-height:1}
-.vis-hero .cap p{font-size:12px;color:rgba(255,255,255,.8);margin-top:4px;font-weight:500}
-.vis-info{padding:16px;display:flex;flex-direction:column;gap:12px}
-.vis-row{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
-.vis-row .ic{width:42px;height:42px;border-radius:12px;background:rgba(253,211,6,.15);
-  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.vis-row .tx b{font-family:'Archivo';font-weight:800;font-size:14px;display:block}
-.vis-row .tx span{font-size:13px;color:rgba(255,255,255,.7);font-weight:500;line-height:1.5}
-.partners{padding:8px 20px 0}
-.partners .lbl{font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:2px;
-  color:rgba(255,255,255,.5);text-align:center;margin-bottom:12px}
-.partners .logos{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.partners .chip{font-size:11px;font-weight:600;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:7px 13px;color:rgba(255,255,255,.85)}
-
-/* ─── DEEP-DIVE OVERLAY (chapter / award) ───────────────── */
-.overlay{position:fixed;inset:0;z-index:200;background:var(--blue-deep);
-  transform:translateY(100%);transition:transform .5s var(--t);overflow:hidden;display:flex;flex-direction:column}
-.overlay.open{transform:none}
-.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.ov-close{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;z-index:60;
-  width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
-  background:rgba(6,8,31,.6);backdrop-filter:blur(14px);color:#fff;font-size:20px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center}
-.ov-hero{position:relative;height:62vh;overflow:hidden}
-.ov-hero img{width:100%;height:100%;object-fit:cover}
-.ov-hero .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,31,.3) 0%,transparent 28%,transparent 55%,rgba(6,8,31,.98) 100%)}
-.ov-hero .htext{position:absolute;left:20px;right:20px;bottom:22px;z-index:2}
-.ov-hero .htext .ac{display:inline-block;font-family:'Archivo';font-weight:800;font-size:10px;letter-spacing:2px;
-  color:#06081F;background:var(--gold);padding:5px 11px;border-radius:20px}
-.ov-hero .htext h1{font-family:'Anton';font-size:clamp(40px,12vw,58px);text-transform:uppercase;line-height:.85;margin-top:12px;
-  text-shadow:0 6px 30px rgba(0,0,0,.6)}
-.ov-zoom-hint{position:absolute;bottom:18px;right:18px;z-index:3;font-size:10px;letter-spacing:1px;
-  background:rgba(6,8,31,.6);backdrop-filter:blur(8px);padding:6px 11px;border-radius:20px;
-  color:rgba(255,255,255,.8);font-weight:600;border:1px solid rgba(255,255,255,.15)}
-
-.ov-body{padding:8px 20px 60px;max-width:680px;margin:0 auto}
-
-/* narrator block */
-.narr{display:flex;align-items:center;gap:14px;margin:18px 0 20px;padding:16px;
-  border-radius:20px;background:linear-gradient(135deg,rgba(253,211,6,.12),rgba(34,38,255,.08));
-  border:1px solid rgba(253,211,6,.25)}
-.narr .av{width:54px;height:54px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--gold),#FFB800);
-  display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:24px;color:#06081F}
-.narr .nt .lbl{font-size:10px;letter-spacing:1.5px;color:var(--gold);font-weight:700;text-transform:uppercase}
-.narr .nt b{font-family:'Archivo';font-weight:800;font-size:17px;display:block;margin-top:2px}
-.narr .nt span{font-size:12px;color:rgba(255,255,255,.65);font-weight:500}
-
-/* timeline pills */
-.tl{display:flex;flex-direction:column;gap:0;margin:4px 0 24px;position:relative;padding-left:6px}
-.tl-item{display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;position:relative}
-.tl-item:not(:last-child)::before{content:"";position:absolute;left:5px;top:16px;bottom:-2px;width:2px;
-  background:linear-gradient(180deg,var(--gold),rgba(253,211,6,.2))}
-.tl-item .dot{width:12px;height:12px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;
-  box-shadow:0 0 0 4px rgba(253,211,6,.15)}
-.tl-item .ti b{font-family:'Anton';font-size:18px;color:var(--gold);line-height:1}
-.tl-item .ti span{font-size:13.5px;color:rgba(255,255,255,.85);font-weight:500;display:block;margin-top:1px}
-
-/* the letter */
-.letter{font-size:16px;line-height:1.78;font-weight:400;color:rgba(255,255,255,.92);white-space:pre-line;
-  letter-spacing:.1px}
-.letter .firstline{font-family:'Archivo';font-weight:800;font-size:21px;line-height:1.3;
-  color:#fff;display:block;margin-bottom:14px;letter-spacing:.2px}
-
-/* chapter nav (prev/next) */
-.chap-nav{display:flex;gap:12px;margin-top:34px}
-.chap-nav button{flex:1;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);
-  color:#fff;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.3s}
-.chap-nav button:active{background:rgba(255,255,255,.1)}
-.chap-nav button:disabled{opacity:.3;pointer-events:none}
-.chap-nav .dir{font-size:9px;letter-spacing:1.5px;color:var(--gold);font-weight:700;text-transform:uppercase}
-.chap-nav .nm{font-family:'Archivo';font-weight:800;font-size:13px;margin-top:3px;line-height:1.1}
-.chap-nav .next{text-align:right}
-
-/* award detail specifics */
-.aw-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
-.aw-photos.single{grid-template-columns:1fr}
-.aw-photo{border-radius:18px;overflow:hidden;position:relative;aspect-ratio:1;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12)}
-.aw-photo img{width:100%;height:100%;object-fit:cover}
-.aw-photo .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:10px 12px;
-  background:linear-gradient(180deg,transparent,rgba(6,8,31,.92));
-  font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.85);font-weight:700;text-transform:uppercase}
-.aw-meta{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 18px}
-.aw-meta .m{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-  border-radius:14px;padding:8px 13px}
-.aw-meta .m .k{font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase}
-.aw-meta .m .v{font-family:'Archivo';font-weight:800;font-size:13px;margin-top:2px}
-.aw-desc{font-size:15px;line-height:1.7;color:rgba(255,255,255,.9);font-weight:400}
-.aw-rare{display:inline-flex;align-items:center;gap:6px;margin:16px 0 0;font-size:13px;color:var(--gold);font-weight:700}
-
-/* zoom viewer */
-.zoomer{position:fixed;inset:0;z-index:300;background:rgba(6,8,31,.98);display:none;
-  align-items:center;justify-content:center;overflow:hidden}
-.zoomer.open{display:flex}
-.zoomer img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s var(--t);transform-origin:center}
-.zoomer .zclose{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;z-index:5;
-  width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.08);color:#fff;font-size:22px;cursor:pointer}
-.zoomer .zctrl{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
-  display:flex;gap:10px;z-index:5}
-.zoomer .zctrl button{width:50px;height:50px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.1);backdrop-filter:blur(10px);color:#fff;font-size:24px;cursor:pointer}
-
-/* loading splash */
-#splash{position:fixed;inset:0;z-index:999;background:var(--blue-deep);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-  transition:opacity .6s,visibility .6s}
-#splash.hide{opacity:0;visibility:hidden}
-#splash .rr{width:90px;height:74px;animation:pulse 1.8s var(--t) infinite}
-#splash .ld{font-family:'Anton';font-size:14px;letter-spacing:4px;color:rgba(255,255,255,.5);text-transform:uppercase}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.7}}
-
-.fade-up{animation:fadeUp .7s var(--t) both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-
-.splash{position:fixed;inset:0;z-index:9999;background:#06081F;display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
-.splash.hide,.splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.splash-logo{display:flex;flex-direction:column;align-items:center;gap:10px}
-.splash-rr-logo{width:160px;height:auto;display:block;max-width:70vw}
-.splash-sub{font-family:'Rajdhani';font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.45);text-transform:uppercase}
-
-
-/* ─── 5-tab navbar ──────────────────────── */
-.navbar{display:flex;gap:0;padding:8px 4px calc(env(safe-area-inset-bottom)+8px);background:rgba(6,8,31,.92);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);position:fixed;bottom:0;left:0;right:0;z-index:100}
-.nav{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;padding:4px 2px;cursor:pointer;transition:.2s var(--t)}
-.nav .nic{width:26px;height:26px;display:flex;align-items:center;justify-content:center}
-.nav .nic svg{width:20px;height:20px;stroke:rgba(255,255,255,.35);transition:.2s var(--t)}
-.nav .nlb{font-family:'Rajdhani';font-size:8px;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.35);text-transform:uppercase;transition:.2s var(--t)}
-.nav.active .nic svg{stroke:var(--gold)}
-.nav.active .nlb{color:var(--gold)}
-/* ─── ARTES gallery ────────────────────── */
-.arts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
-.arts-card{border-radius:12px;overflow:hidden;background:#0d1030;position:relative;aspect-ratio:16/9;cursor:pointer}
-.arts-card img{width:100%;height:100%;object-fit:cover;transition:transform .3s var(--t)}
-.arts-card:active img{transform:scale(.97)}
-.arts-card .arts-label{position:absolute;bottom:0;left:0;right:0;padding:8px 10px 6px;background:linear-gradient(0deg,rgba(6,8,31,.92),transparent);font-family:'Rajdhani';font-size:11px;font-weight:700;letter-spacing:.5px;color:#fff}
-/* ─── ACERVO inventory ──────────────────── */
-.acervo-header{padding:22px 20px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
-.acervo-stats{display:flex;gap:0;background:rgba(255,255,255,.04);border-radius:12px;overflow:hidden;margin-bottom:14px}
-.acervo-stat{flex:1;padding:10px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
-.acervo-stat:last-child{border-right:none}
-.acervo-stat .n{font-family:'Anton';font-size:20px}
-.acervo-stat .l{font-size:8px;font-family:'Rajdhani';letter-spacing:.5px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:1px}
-.acervo-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-bottom:8px}
-.acervo-filters::-webkit-scrollbar{display:none}
-.af{font-family:'Rajdhani';font-size:12px;font-weight:700;letter-spacing:.3px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);white-space:nowrap;cursor:pointer;transition:.2s}
-.af.on{background:var(--gold);color:#000;border-color:var(--gold)}
-.acervo-list{padding:0 16px 120px}
-.acervo-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.acervo-item-num{font-family:'Rajdhani';font-size:11px;font-weight:700;color:rgba(255,255,255,.25);min-width:30px;padding-top:2px}
-.acervo-item-body{flex:1}
-.acervo-item-name{font-family:'Archivo';font-size:13px;font-weight:600;line-height:1.35;margin-bottom:3px}
-.acervo-item-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.ai-year{font-size:11px;color:rgba(255,255,255,.4)}
-.ai-tag{font-size:9px;font-weight:700;letter-spacing:.4px;padding:2px 8px;border-radius:10px;text-transform:uppercase}
-.ai-col-R{background:rgba(34,38,255,.25);color:#8a8eff}
-.ai-col-Rn{background:rgba(253,211,6,.2);color:var(--gold)}
-.ai-ok{background:rgba(0,200,80,.18);color:#4eff8a}
-.ai-nok{background:rgba(255,60,60,.2);color:#ff7a7a}
-.ai-imp{color:var(--gold);font-size:14px;margin-left:auto;padding-top:2px}
-.acervo-item-nota{font-family:'Archivo';font-size:11px;color:rgba(255,211,6,.6);margin-top:4px;font-style:italic}
-.acervo-empty{padding:40px 20px;text-align:center;color:rgba(255,255,255,.3);font-family:'Rajdhani';font-size:14px}
-
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.splash-sub{font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;font-weight:500}
 </style>
 </head>
 <body>
-<div class="splash" id="splash">
-  <div class="splash-logo">
-    <svg class="splash-rr-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 225" style="width:160px;height:auto;display:block"><g transform="translate(-1265,-397)"><path d="M 1417.425781 522.929688 L 1438.671875 522.929688 C 1438.671875 470.292969 1396.132812 427.597656 1343.558594 427.328125 L 1343.558594 427.320312 L 1265.378906 427.320312 L 1313.183594 475.125 L 1343.0625 475.125 C 1369.460938 475.125 1390.867188 496.527344 1390.867188 522.929688 L 1349.035156 522.929688 L 1444.648438 618.542969 L 1513.035156 618.542969 Z M 1417.425781 522.929688 " fill="#FDCE06"/><path d="M 1519.011719 522.929688 L 1546.234375 522.929688 C 1546.234375 470.125 1503.425781 427.320312 1450.621094 427.320312 L 1379.296875 427.320312 C 1402.59375 436.179688 1421.839844 453.316406 1433.425781 475.125 L 1450.621094 475.125 C 1477.023438 475.125 1498.429688 496.527344 1498.429688 522.929688 L 1450.621094 522.929688 L 1546.234375 618.542969 L 1614.621094 618.542969 Z M 1519.011719 522.929688 " fill="#FFFFFF"/><path d="M 1510.378906 421.34375 C 1510.378906 408.144531 1521.082031 397.441406 1534.28125 397.441406 C 1547.484375 397.441406 1558.183594 408.144531 1558.183594 421.34375 C 1558.183594 434.546875 1547.484375 445.246094 1534.28125 445.246094 C 1521.082031 445.246094 1510.378906 434.546875 1510.378906 421.34375 " fill="#FFFFFF"/></g></svg>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 225" style="width:130px;height:auto">
+      <g transform="translate(-1265,-397)">
+        <path d="M 1417.425781 522.929688 L 1438.671875 522.929688 C 1438.671875 470.292969 1396.132812 427.597656 1343.558594 427.328125 L 1343.558594 427.320312 L 1265.378906 427.320312 L 1313.183594 475.125 L 1343.0625 475.125 C 1369.460938 475.125 1390.867188 496.527344 1390.867188 522.929688 L 1349.035156 522.929688 L 1444.648438 618.542969 L 1513.035156 618.542969 Z" fill="#FDCE06"/>
+        <path d="M 1519.011719 522.929688 L 1546.234375 522.929688 C 1546.234375 470.125 1503.425781 427.320312 1450.621094 427.320312 L 1379.296875 427.320312 C 1402.59375 436.179688 1421.839844 453.316406 1433.425781 475.125 L 1450.621094 475.125 C 1477.023438 475.125 1498.429688 522.929688 1498.429688 522.929688 L 1450.621094 522.929688 L 1546.234375 618.542969 L 1614.621094 618.542969 Z" fill="#FFFFFF"/>
+        <path d="M 1510.378906 421.34375 C 1510.378906 408.144531 1521.082031 397.441406 1534.28125 397.441406 C 1547.484375 397.441406 1558.183594 408.144531 1558.183594 421.34375 C 1558.183594 434.546875 1547.484375 445.246094 1534.28125 445.246094 C 1521.082031 445.246094 1510.378906 434.546875 1510.378906 421.34375 Z" fill="#FFFFFF"/>
+      </g>
+    </svg>
     <div class="splash-sub">EM CAMPO · MIAMI 2026</div>
   </div>
 </div>
 
-<div class="ambient"></div>
-<div class="grain"></div>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-title">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 225" class="header-rr">
+      <g transform="translate(-1265,-397)">
+        <path d="M 1417.425781 522.929688 L 1438.671875 522.929688 C 1438.671875 470.292969 1396.132812 427.597656 1343.558594 427.328125 L 1343.558594 427.320312 L 1265.378906 427.320312 L 1313.183594 475.125 L 1343.0625 475.125 C 1369.460938 475.125 1390.867188 496.527344 1390.867188 522.929688 L 1349.035156 522.929688 L 1444.648438 618.542969 L 1513.035156 618.542969 Z" fill="#FDCE06"/>
+        <path d="M 1519.011719 522.929688 L 1546.234375 522.929688 C 1546.234375 470.125 1503.425781 427.320312 1450.621094 427.320312 L 1379.296875 427.320312 C 1402.59375 436.179688 1421.839844 453.316406 1433.425781 475.125 L 1450.621094 475.125 C 1477.023438 475.125 1498.429688 522.929688 1498.429688 522.929688 L 1450.621094 522.929688 L 1546.234375 618.542969 L 1614.621094 618.542969 Z" fill="#FFFFFF"/>
+        <path d="M 1510.378906 421.34375 C 1510.378906 408.144531 1521.082031 397.441406 1534.28125 397.441406 C 1547.484375 397.441406 1558.183594 408.144531 1558.183594 421.34375 C 1558.183594 434.546875 1547.484375 445.246094 1534.28125 445.246094 C 1521.082031 445.246094 1510.378906 434.546875 1510.378906 421.34375 Z" fill="#FFFFFF"/>
+      </g>
+    </svg>
+    <div class="header-name">FENÔMENO <span>50</span></div>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+</header>
 
-<div id="splash">
-  <svg class="rr" viewBox="0 0 120 86"><circle cx="100" cy="14" r="13" fill="#FDD306"/><path d="M14 84 L46 22 Q70 24 70 46 L70 84 L52 84 L52 50 Q52 40 40 42 L40 84 Z" fill="#FDD306"/><path d="M52 84 L84 22 Q108 24 108 46 L108 84 L90 84 L90 50 Q90 40 78 42 L78 84 Z" fill="#fff"/></svg>
-  <div class="ld">Fenômeno 50</div>
-</div>
-
-<div id="app">
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="brand">
-      <svg class="rr" viewBox="0 0 120 86"><circle cx="100" cy="14" r="13" fill="#FDD306"/><path d="M14 84 L46 22 Q70 24 70 46 L70 84 L52 84 L52 50 Q52 40 40 42 L40 84 Z" fill="#FDD306"/><path d="M52 84 L84 22 Q108 24 108 46 L108 84 L90 84 L90 50 Q90 40 78 42 L78 84 Z" fill="#fff"/></svg>
-      <div class="bt"><b>CASA <span class="y">REDE</span> RONALDO</b><span>EM CAMPO · MIAMI 2026</span></div>
+<!-- LIST VIEW -->
+<div id="view-list">
+  <div class="list-hero">
+    <div class="list-eyebrow" id="lbl-expo">EXPOSIÇÃO</div>
+    <div class="list-title" id="lbl-subtitle">CASA REDE<br>RONALDO</div>
+    <div class="list-sub" id="lbl-place">Wynwood · Miami · 2026</div>
+    <div class="list-meta">
+      <span>🗓 <span id="lbl-dates">11 jun — 19 jul 2026</span></span>
+      <span>📍 Wynwood Marketplace</span>
     </div>
-    <div class="langs">
-      <button class="lang active" data-lang="pt">PT</button>
-      <button class="lang" data-lang="en">EN</button>
-      <button class="lang" data-lang="es">ES</button>
+  </div>
+  <div id="cards-container"></div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div id="view-detail">
+  <div class="detail-back" onclick="showList()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    <span id="lbl-back">Voltar</span>
+  </div>
+  <div class="detail-img-wrap">
+    <img id="detail-img" class="detail-img" src="" alt="" loading="lazy">
+    <div class="detail-img-label" id="detail-img-label"></div>
+  </div>
+  <div class="detail-body">
+    <div class="detail-tag">
+      <span class="detail-ato" id="detail-ato"></span>
+      <span class="detail-years" id="detail-years"></span>
     </div>
+    <h1 class="detail-title" id="detail-title"></h1>
+    <div class="detail-narrator-block">
+      <div class="detail-narrator-name" id="detail-narrator"></div>
+      <div class="detail-narrator-role" id="detail-role"></div>
+    </div>
+    <div class="detail-letter-label" id="lbl-wall">TEXTO DE PAREDE</div>
+    <div class="detail-text" id="detail-text"></div>
   </div>
-
-  <div class="viewport">
-    <!-- HOME -->
-    <div class="screen active" id="s-home"></div>
-    <!-- JOURNEY -->
-    <div class="screen" id="s-journey"></div>
-    <!-- AWARDS -->
-    <div class="screen" id="s-awards"></div>
-    <!-- VISIT -->
-    <div class="screen" id="s-arts"></div>
-  <div class="screen" id="s-acervo"></div>
-  <div class="screen" id="s-visit"></div>
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="navbar">
-    <button class="nav active" data-go="home">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
-      <span class="nlb">INÍCIO</span>
+  <div class="detail-nav">
+    <button class="detail-nav-btn" id="btn-prev" onclick="navChapter(-1)">
+      <span id="lbl-prev">Anterior</span>
+      ← <span id="prev-title"></span>
     </button>
-    <button class="nav" data-go="journey">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 5l7 4-7 4M20 12H8"/><circle cx="4" cy="5" r="1.5" fill="currentColor"/></svg></span>
-      <span class="nlb">A JORNADA</span>
+    <button class="detail-nav-btn" id="btn-next" onclick="navChapter(1)">
+      <span id="lbl-next">Próximo</span>
+      <span id="next-title"></span> →
     </button>
-    <button class="nav" data-go="awards">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v4a6 6 0 0 1-12 0V4z"/><path d="M6 6H3v2a3 3 0 0 0 3 3M18 6h3v2a3 3 0 0 1-3 3M9 20h6M10 16v4M14 16v4"/></svg></span>
-      <span class="nlb">PRÊMIOS</span>
-    </button>
-    <button class="nav" data-go="arts">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
-      <span class="nlb">ARTES</span>
-    </button>
-    <button class="nav" data-go="acervo">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14M5 12h14M5 16h8"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span>
-      <span class="nlb">ACERVO</span>
-    </button>
-    <button class="nav" data-go="visit">
-      <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-      <span class="nlb">VISITA</span>
-    </button>
-  </div>
-</div>
-
-<!-- DEEP DIVE OVERLAY -->
-<div class="overlay" id="overlay">
-  <button class="ov-close" onclick="closeOverlay()">✕</button>
-  <div class="ov-scroll" id="ovScroll"></div>
-</div>
-
-<!-- ZOOM VIEWER -->
-<div class="zoomer" id="zoomer">
-  <button class="zclose" onclick="closeZoom()">✕</button>
-  <img id="zoomImg" src="" alt="">
-  <div class="zctrl">
-    <button onclick="zoomStep(-1)">−</button>
-    <button onclick="zoomStep(1)">+</button>
   </div>
 </div>
 
 <script>
-/* Helpers para imagens externas */
-function panelImg(id){ var el=document.getElementById('pimg_'+id); return el?el.src:''; }
-function panelThumb(id){ var el=document.getElementById('pthumb_'+id); return el?el.src:''; }
-function heroImg(){ var el=document.getElementById('hero_img'); return el?el.src:''; }
+const IMG = 'https://brunodeluca-alt.github.io/fenomeno50/imgs';
 
-/* ═══════════════════════════════════════════════════════════
-   DATA — injected below as PANELS, AWARDS
-   ═══════════════════════════════════════════════════════════ */
+const CHAPTERS = [
+  {id:'entrada',img:IMG+'/pimg_p00.jpg',
+   tag:{pt:'FACHADA',en:'ENTRANCE',es:'ENTRADA'},years:'',
+   title:{pt:'A Entrada',en:'The Entrance',es:'La Entrada'},
+   narrator:{pt:'Marcos Uchôa',en:'Marcos Uchôa',es:'Marcos Uchôa'},
+   role:{pt:'Jornalista · ESPN',en:'Journalist · ESPN',es:'Periodista · ESPN'},
+   text:{
+    pt:'Ronaldinho. Ronaldo. Fenômeno.\n\nComo uma carreira se transforma tanto assim?\n\nDe ser tratado de forma carinhosa a virar algo sinônimo de uma força da natureza?\n\nTodos nós vamos aprendendo muito sobre como defini-lo. Às vezes parece que as palavras não conseguem acompanhar a grandeza da história. Porque toda vez que você acha que tem uma boa definição, uma boa imagem, uma boa frase pra resumir o que foi Ronaldo — aparece uma nova cena que faz tudo parecer pequeno.\n\nRonaldo jogou bola como se a gravidade fosse opcional. Como se os defensores fossem obstáculos de outro esporte. E fez isso carregando um peso que ninguém via: lesões que encerrariam carreiras de qualquer outro. Voltas que pareciam milagre mas eram, na verdade, teimosia pura.\n\nEu cobri Copa do Mundo. Vi Pelé em foto, Maradona ao vivo. Vi Messi virar o maior de todos. Mas de Ronaldo eu guardo algo diferente: a sensação de que o jogo nunca seria suficiente pra ele.\n\nBem-vindo à história do maior artilheiro de Copas do Mundo da história. Bem-vindo à história do Fenômeno.',
+    en:'Ronaldinho. Ronaldo. Phenomenon.\n\nHow does a career transform so much?\n\nFrom a nickname given with warmth to something synonymous with a force of nature?\n\nAll of us have struggled to define him. Sometimes words cannot keep up with the magnitude of the story. Because every time you think you have the right phrase to sum up what Ronaldo was — a new scene appears that makes everything else seem small.\n\nRonaldo played football as if gravity were optional. As if defenders were obstacles from a different sport. And he did it carrying a weight no one could see: injuries that would have ended any other career. Comebacks that looked like miracles but were, in truth, pure stubbornness.\n\nI covered World Cups. I saw Pelé in photos, Maradona live. I watched Messi become the greatest of all. But with Ronaldo I hold something different: the feeling that the game was never enough for him.\n\nWelcome to the story of the greatest World Cup scorer in history. Welcome to the story of the Phenomenon.',
+    es:'Ronaldinho. Ronaldo. Fenómeno.\n\n¿Cómo una carrera se transforma tanto?\n\nDe ser un apodo dado con cariño a convertirse en sinónimo de una fuerza de la naturaleza.\n\nTodos nosotros hemos luchado para definirlo. A veces las palabras no pueden seguir el ritmo de la magnitud de la historia. Porque cada vez que crees tener la frase correcta para resumir lo que fue Ronaldo, aparece una nueva escena que hace que todo parezca pequeño.\n\nRonaldo jugó al fútbol como si la gravedad fuera opcional. Como si los defensas fueran obstáculos de otro deporte. Y lo hizo cargando un peso que nadie podía ver.\n\nCubrí Copas del Mundo. Vi a Pelé en fotos, a Maradona en vivo. Vi a Messi convertirse en el más grande. Pero con Ronaldo guardo algo diferente.\n\nBienvenido a la historia del máximo goleador de Copas del Mundo de la historia. Bienvenido a la historia del Fenómeno.'
+   }},
+  {id:'p02',img:IMG+'/pimg_p02.jpg',
+   tag:{pt:'ATO 1',en:'ACT 1',es:'ACTO 1'},years:'1976—1993',
+   title:{pt:'A Origem',en:'The Origin',es:'El Origen'},
+   narrator:{pt:'Nélio Nazário',en:'Nélio Nazário',es:'Nélio Nazário'},
+   role:{pt:'Pai',en:'Father',es:'Padre'},
+   text:{
+    pt:'Meu nome é Nélio. Sou o pai do Ronaldo.\n\nEle nasceu no dia 18 de setembro de 1976. Mas está escrito 22 na certidão. Eu demorei pra registrar e perdi o prazo. Até hoje o mundo comemora no dia errado. Coisa de pai.\n\nAntes de virar Fenômeno, ele foi o caçula. Três filhos numa casa de Bento Ribeiro, uma TV que vivia quebrada. Eu trabalhava na Telerj, técnico de cabos. Final de semana ia pro camelô de Madureira pra fechar o mês.\n\nO Ronaldo pedia vitamina, cuidava do que comia. Quando a Sônia chegava com as queimaduras, ele passava pomada nos braços dela, fazia carinho, e prometia que um dia ia tirar ela daquela vida. Cumpriu.\n\nA gente não tinha quase nada. Mas ele tinha uma bola. E era só o que ele precisava.\n\nPor volta dos 11 anos eu levei ele pra fazer teste no Valqueire Tênis Clube. A fila de ala estava lotada. Aí um técnico chamado Jairzinho viu o menino e disse: "Esse aqui joga diferente."\n\nEm 1993, com 16 anos, o Ronaldo estreou no Cruzeiro. Eu vi com meus olhos.',
+    en:'My name is Nélio. I am Ronaldo\'s father.\n\nHe was born on September 18, 1976. But the birth certificate says the 22nd. I was late registering him and missed the deadline. To this day the world celebrates on the wrong day. A father\'s mistake.\n\nBefore becoming the Phenomenon, he was the youngest. Three kids in a house in Bento Ribeiro, a TV that was always broken. I worked at Telerj as a cable technician. On weekends I sold at the market in Madureira to make ends meet.\n\nRonaldo asked for vitamins, watched what he ate. When Sônia came home with burns, he would rub ointment on her arms, comfort her, and promise that one day he\'d take her out of that life. He did.\n\nWe had almost nothing. But he had a ball. And that was all he needed.\n\nAround age 11, I took him to try out at Valqueire Tennis Club. The wing position was full. Then a coach named Jairzinho saw the boy and said: "This one plays different."\n\nIn 1993, at 16 years old, Ronaldo made his debut for Cruzeiro. I saw it with my own eyes.',
+    es:'Me llamo Nélio. Soy el padre de Ronaldo.\n\nNació el 18 de septiembre de 1976. Pero el acta de nacimiento dice el 22. Me demoré en registrarlo y perdí el plazo. Hasta hoy el mundo celebra en el día equivocado. Cosa de padre.\n\nAntes de convertirse en Fenómeno, era el más pequeño. Tres hijos en una casa de Bento Ribeiro, un televisor siempre roto. Trabajaba en Telerj como técnico de cables. Los fines de semana vendía en el mercado de Madureira para llegar a fin de mes.\n\nRonaldo pedía vitaminas, cuidaba lo que comía. Cuando Sônia llegaba con quemaduras, le ponía pomada en los brazos, la consolaba y prometía que algún día la sacaría de esa vida. Lo cumplió.\n\nNo teníamos casi nada. Pero él tenía una pelota. Y era todo lo que necesitaba.\n\nAlrededor de los 11 años lo llevé a hacer prueba en el Valqueire Tennis Club. La fila estaba llena. Un entrenador llamado Jairzinho vio al niño y dijo: "Este juega diferente."\n\nEn 1993, con 16 años, Ronaldo debutó en el Cruzeiro. Lo vi con mis propios ojos.'
+   }},
+  {id:'p03',img:IMG+'/pimg_p03.jpg',
+   tag:{pt:'ATO 2',en:'ACT 2',es:'ACTO 2'},years:'1993—2001',
+   title:{pt:'Ascensão e Queda',en:'Rise and Fall',es:'Ascenso y Caída'},
+   narrator:{pt:'Zico',en:'Zico',es:'Zico'},
+   role:{pt:'Ídolo, amigo pra vida',en:'Idol and lifelong friend',es:'Ídolo y amigo de por vida'},
+   text:{
+    pt:'Eu era o ídolo daquele garoto. Soube depois. Nunca poderia imaginar que daria um autógrafo pro futuro Fenômeno.\n\nAí em 1993 me chega um pivete magro do Cruzeiro fazendo 56 gols em 58 jogos como profissional. Com 16 anos. Comecei a prestar atenção.\n\nVi ele na Copa de 1994. Convocado por Parreira, nem jogou um minuto. Mas ficou. Aprendeu. Saiu com a medalha no pescoço e fome de mais.\n\nEm 1996, no Barcelona, vi o gol contra o Compostela ao vivo. Aquele drible em todo mundo, a corrida, o gol. Parei e pensei: existe algo além do que eu pensei que era possível.\n\nDepois vieram as lesões. O joelho direito. Duas vezes. A segunda foi em 2000, ao vivo, na TV, o tendão patelar rompendo no Olímpico de Roma. Eu estava na televisão cobrindo. Não conseguia acreditar.\n\nMuita gente achou que tinha acabado. Eu não. Porque eu conhecia o Ronaldo. Sabia do que ele era feito.\n\nA diferença entre o Ronaldo e outros grandes jogadores é que ele voltou. Duas vezes. Isso não é futebol. Isso é caráter.',
+    en:'I was that boy\'s idol. I found out later. I never could have imagined I\'d give an autograph to the future Phenomenon.\n\nThen in 1993 this skinny kid from Cruzeiro comes along scoring 56 goals in 58 professional games. At 16 years old. I started paying attention.\n\nI saw him at the 1994 World Cup. Called up by Parreira, didn\'t play a single minute. But he stayed. He learned. He left with a medal and hunger for more.\n\nIn 1996 at Barcelona, I saw the goal against Compostela live. That dribble past everyone, the run, the finish. I stopped and thought: there\'s something beyond what I thought was possible.\n\nThen came the injuries. The right knee. Twice. The second was in 2000, live on TV, the patellar tendon snapping at the Olimpico in Rome. I was on television covering it. I couldn\'t believe what I was watching.\n\nMany people thought it was over. I didn\'t. Because I knew Ronaldo. I knew what he was made of.\n\nThe difference between Ronaldo and other great players is that he came back. Twice. That\'s not football. That\'s character.',
+    es:'Yo era el ídolo de ese chico. Lo supe después. Nunca hubiera imaginado que le daría un autógrafo al futuro Fenómeno.\n\nLuego en 1993 llega este chico flaco del Cruzeiro marcando 56 goles en 58 partidos. Con 16 años. Empecé a prestar atención.\n\nLo vi en el Mundial de 1994. Convocado, no jugó ni un minuto. Pero se quedó. Aprendió. Se fue con la medalla y hambre de más.\n\nEn 1996 en el Barcelona, vi el gol contra el Compostela en vivo. Ese regate a todos, la carrera, el remate. Me detuve y pensé: hay algo más allá de lo que creía posible.\n\nLuego vinieron las lesiones. La rodilla derecha. Dos veces. La segunda en 2000, en vivo por TV, el tendón rompiéndose en el Olímpico de Roma. Estaba cubriéndolo. No podía creer lo que veía.\n\nMucha gente pensó que había terminado. Yo no. Porque conocía a Ronaldo. Sabía de qué estaba hecho.\n\nLa diferencia entre Ronaldo y otros grandes jugadores es que volvió. Dos veces. Eso no es fútbol. Eso es carácter.'
+   }},
+  {id:'p05',img:IMG+'/pimg_p05.jpg',
+   tag:{pt:'ATO 3',en:'ACT 3',es:'ACTO 3'},years:'2002—2007',
+   title:{pt:'O Fenômeno',en:'The Phenomenon',es:'El Fenómeno'},
+   narrator:{pt:'Luiz Felipe Scolari',en:'Luiz Felipe Scolari',es:'Luiz Felipe Scolari'},
+   role:{pt:'Felipão · Técnico do Penta',en:'Felipão · Coach of the Five-Time Champions',es:'Felipão · Técnico del Penta'},
+   text:{
+    pt:'Tu é meu camisa 9. Titular. Não tem discussão.\n\nFoi isso que eu falei pro Ronaldo em maio de 2002. Tinha gente que duvidava. Tinha jornalista escrevendo que era loucura. Ele tinha passado quase três anos sem jogar direito por causa do joelho. Muita gente tinha desistido dele.\n\nEu não.\n\nNa Copa de 2002, na Coreia e no Japão, eu vi a ressurreição. Oito gols. Artilheiro. Campeão. Os dois gols na final contra a Alemanha. A foto do abraço depois do apito final — aquilo é de outro mundo.\n\nMas o que mais me marca não é isso. É o que aconteceu antes. É um jogador que, quando todo mundo tinha certeza que ele não ia voltar, treinou como se a Copa dependesse de cada segundo. Porque pra ele, dependia.\n\nEsse é o legado real do Ronaldo: não os gols. A recusa em aceitar o fim.',
+    en:'You are my number 9. Starter. No discussion.\n\nThat\'s what I told Ronaldo in May 2002. There were people who had doubts. Journalists writing that it was madness. He had spent nearly three years unable to play properly because of his knee. Many people had given up on him.\n\nI hadn\'t.\n\nAt the 2002 World Cup, in Korea and Japan, I watched the resurrection. Eight goals. Top scorer. Champion. The two goals in the final against Germany. The photo of the embrace after the final whistle — that\'s from another world.\n\nBut what stays with me most isn\'t that. It\'s what happened before. It\'s a player who, when everyone was certain he wouldn\'t come back, trained as if the World Cup depended on every second. Because for him, it did.\n\nThat\'s Ronaldo\'s true legacy: not the goals. The refusal to accept the end.',
+    es:'Tú eres mi número 9. Titular. Sin discusión.\n\nEso fue lo que le dije a Ronaldo en mayo de 2002. Había gente que dudaba. Periodistas escribiendo que era una locura. Había pasado casi tres años sin poder jugar bien por la rodilla. Mucha gente había renunciado a él.\n\nYo no.\n\nEn el Mundial de 2002, en Corea y Japón, vi la resurrección. Ocho goles. Máximo goleador. Campeón. Los dos goles en la final contra Alemania. La foto del abrazo después del pitido final — eso es de otro mundo.\n\nPero lo que más me marca no es eso. Es lo que pasó antes. Es un jugador que, cuando todos estaban seguros de que no volvería, entrenó como si el Mundial dependiera de cada segundo. Porque para él, dependía.\n\nEse es el legado real de Ronaldo: no los goles. La negativa a aceptar el fin.'
+   }},
+  {id:'p06',img:IMG+'/pimg_p06.jpg',
+   tag:{pt:'ATO 4',en:'ACT 4',es:'ACTO 4'},years:'2007—2011',
+   title:{pt:'O Homem',en:'The Man',es:'El Hombre'},
+   narrator:{pt:'David Beckham',en:'David Beckham',es:'David Beckham'},
+   role:{pt:'Companheiro no Real Madrid',en:'Real Madrid teammate',es:'Compañero en el Real Madrid'},
+   text:{
+    pt:'O ídolo precisou virar homem.\n\nEu joguei com o Ronaldo no Real Madrid. Quando cheguei, em 2003, levei um tempo pra me adaptar. A Espanha era outra língua, outra cultura, um novo lugar pra mim e pra minha família. Foi o Ronaldo quem me acolheu e ajudou a todos nós. Sempre, sem pose de estrela.\n\nEle nos chamava pra churrasco, nos apresentou o Brasil dentro da Espanha, ajudou minha família a se sentir em casa.\n\nRonaldo é o jogador mais completo que eu já vi. Mas o que eu mais admiro é o homem.\n\nSomos amigos para a vida toda. Vivemos uma bela história dentro e fora de campo, e seguimos vivendo. Tudo o que passamos juntos fica comigo para sempre.',
+    en:'The idol had to become a man.\n\nI played with Ronaldo at Real Madrid. When I arrived in 2003, it took me time to adjust. Spain was a different language, a different culture, a new place for me and my family to call home. It was Ronaldo who welcomed us and helped us all. Always, without any star attitude.\n\nHe called us for barbecues, introduced us to Brazil within Spain, helped my family feel at home.\n\nRonaldo is the most complete player I have ever seen. But what I admire most is the man.\n\nWe are friends for life. We lived a beautiful story on and off the pitch, and we keep on living it. Everything we\'ve been through together stays with me forever.',
+    es:'El ídolo tuvo que convertirse en hombre.\n\nJugué con Ronaldo en el Real Madrid. Cuando llegué en 2003, me llevó tiempo adaptarme. España era otro idioma, otra cultura, un nuevo lugar para mí y mi familia. Fue Ronaldo quien nos acogió y ayudó a todos. Siempre, sin actitud de estrella.\n\nNos llamaba para asados, nos presentó Brasil dentro de España, ayudó a que mi familia se sintiera en casa.\n\nRonaldo es el jugador más completo que he visto jamás. Pero lo que más admiro es al hombre.\n\nSomos amigos de por vida. Vivimos una hermosa historia dentro y fuera del campo, y seguimos viviéndola. Todo lo que hemos pasado juntos se queda conmigo para siempre.'
+   }},
+  {id:'p07',img:IMG+'/pimg_p07.jpg',
+   tag:{pt:'ATO 5',en:'ACT 5',es:'ACTO 5'},years:'2012—2026',
+   title:{pt:'De Volta Pra Casa',en:'Back Home',es:'De Vuelta a Casa'},
+   narrator:{pt:'Dona Sônia',en:'Dona Sônia',es:'Doña Sônia'},
+   role:{pt:'Mãe',en:'Mother',es:'Madre'},
+   text:{
+    pt:'Eu sou a Sônia. Sou a mãe do Ronaldo.\n\nQuando ele parou de jogar, em 2011, eu pensei que finalmente ele ia descansar. Não tinha acabado nada. O Ronaldo nunca soube ficar parado.\n\nEm 2018 virou presidente do Real Valladolid na Espanha. Em 2019, ganhou o Globe Soccer Award. Em 2022 voltou pro Cruzeiro, onde tudo começou.\n\nEle criou uma fundação pra cuidar de gente. A missão é a cara dele: encontrar fenômenos espalhados por todo canto do Brasil, gente cheia de talento e sem oportunidade. Já são 15 anos nisso. Mais de 750 mil pessoas alcançadas.\n\nA maior conquista do nosso pai não está em nenhum título ou prêmio que vocês viram aqui. O que mais me orgulha é o tipo de pessoa que ele é.\n\nEle nasceu pra ser o Ronaldo. Cinquenta anos do meu menino.',
+    en:'I am Sônia. I am Ronaldo\'s mother.\n\nWhen he stopped playing in 2011, I thought he would finally rest. It wasn\'t over at all. Ronaldo never knew how to stay still.\n\nIn 2018 he became president of Real Valladolid in Spain. In 2019, he won the Globe Soccer Award. In 2022 he returned to Cruzeiro, where it all began.\n\nHe created a foundation to care for people. The mission is just like him: find phenomena scattered across Brazil, people full of talent without opportunity. It\'s been 15 years of this. More than 750,000 people reached.\n\nRonaldo\'s greatest achievement isn\'t in any title or award you\'ve seen here. What I\'m most proud of is the kind of person he is.\n\nHe was born to be Ronaldo. Fifty years of my boy.',
+    es:'Soy Sônia. Soy la madre de Ronaldo.\n\nCuando dejó de jugar en 2011, pensé que finalmente descansaría. No había terminado nada. Ronaldo nunca supo quedarse quieto.\n\nEn 2018 se convirtió en presidente del Real Valladolid. En 2019 ganó el Globe Soccer Award. En 2022 regresó al Cruzeiro, donde todo comenzó.\n\nCreó una fundación para cuidar a la gente. La misión es justo como él: encontrar fenómenos repartidos por Brasil, gente llena de talento sin oportunidad. Son 15 años en esto. Más de 750,000 personas alcanzadas.\n\nEl mayor logro de Ronaldo no está en ningún título o premio que hayan visto aquí. De lo que más me enorgullezco es del tipo de persona que es.\n\nNació para ser Ronaldo. Cincuenta años de mi niño.',
+   }},
+  {id:'p08',img:IMG+'/pimg_p08.jpg',
+   tag:{pt:'50 ANOS',en:'50 YEARS',es:'50 AÑOS'},years:'2026',
+   title:{pt:'Em Nome do Nós',en:'In Our Name',es:'En Nuestro Nombre'},
+   narrator:{pt:'Os Filhos',en:'The Children',es:'Los Hijos'},
+   role:{pt:'Alex, Maria Alice, Maria Sophia e Ronald',en:'Alex, Maria Alice, Maria Sophia and Ronald',es:'Alex, María Alice, María Sophia y Ronald'},
+   text:{
+    pt:'Crescer sendo filho do Fenômeno é diferente. De um jeito que só a gente sabe.\n\nA gente não cresceu embaixo do mesmo teto. Mas todos fomos criados juntos. Existe uma cumplicidade entre nós que não precisa de explicação. A gente sabe as dores de carregar esse nome, e sabe as alegrias.\n\nE tem uma coisa que a gente precisa falar: temos muito orgulho de sermos brasileiros. Quando estamos fora do Brasil e alguém fala Ronaldo Nazário, e a gente descobre que somos filhos dele, o impacto nunca nos surpreende. O brilho naqueles olhos de quem nos descobre, o amor que ele transbordou e ainda nos encontra.\n\nEntão se for pra sair dessa experiência levando algo, não é a história dele que você carrega. É a sua.\n\nCom amor — Ronald, Alex, Maria Sophia e Maria Alice Nazário',
+    en:'Growing up as children of the Phenomenon is different. In a way that only we understand.\n\nWe didn\'t all grow up under the same roof. But we were all raised together. There\'s a bond between us that needs no explanation. We know the weight of carrying this name, and we know the joy.\n\nAnd there\'s one thing we need to say: we are very proud to be Brazilian. When we\'re outside Brazil and someone says Ronaldo Nazário, and they discover we are his children, the impact never surprises us. The shine in the eyes of those who discover us, the love he poured out that still finds us.\n\nSo if you\'re going to leave this experience carrying something, it\'s not his story you carry. It\'s yours.\n\nWith love — Ronald, Alex, Maria Sophia and Maria Alice Nazário',
+    es:'Crecer siendo hijos del Fenómeno es diferente. De una manera que solo nosotros entendemos.\n\nNo todos crecimos bajo el mismo techo. Pero todos fuimos criados juntos. Hay un vínculo entre nosotros que no necesita explicación. Conocemos el peso de llevar este nombre, y conocemos la alegría.\n\nY hay una cosa que necesitamos decir: estamos muy orgullosos de ser brasileños. Cuando estamos fuera de Brasil y alguien dice Ronaldo Nazário, y descubren que somos sus hijos, el impacto nunca nos sorprende. El brillo en los ojos de quienes nos descubren, el amor que él derramó y que todavía nos encuentra.\n\nEntonces si vas a salir de esta experiencia llevando algo, no es su historia lo que llevas. Es la tuya.\n\nCon amor — Ronald, Alex, María Sophia y María Alice Nazário'
+   }}
+];
 
-const PANELS = [{"id": "p00", "accent": "#2226FF", "ato": {"pt": "INTRO \u00b7 2026", "en": "INTRO \u00b7 2026", "es": "INTRO \u00b7 2026"}, "title": {"pt": "FEN\u00d4MENO 50 ANOS", "en": "THE PHENOMENON 50 YEARS", "es": "FEN\u00d3MENO 50 A\u00d1OS"}, "narrator": {"name": "Marcos Uch\u00f4a", "role": {"pt": "Jornalista \u00b7 CNN Brasil", "en": "Journalist \u00b7 CNN Brasil", "es": "Periodista \u00b7 CNN Brasil"}}, "timeline": [], "text": {"pt": "Ronaldinho. Ronaldo. Fen\u00f4meno. Como uma carreira se transforma tanto assim?\n\nDe ser tratado de forma carinhosa a virar algo sin\u00f4nimo de uma for\u00e7a da natureza?\n\nTodos n\u00f3s vamos aprendendo muito sobre o mundo atrav\u00e9s de hist\u00f3rias ouvidas quando \u00e9ramos crian\u00e7as. Hist\u00f3rias de pr\u00edncipes, de guerreiros, de her\u00f3is. E nelas existe assim uma esp\u00e9cie de uma f\u00f3rmula, de um padr\u00e3o.\n\nO her\u00f3i nos \u00e9 apresentado com suas virtudes. Mas tem um momento na vida dele em que ele sofre muito, que duvidam dele, que ele se abala com tanta coisa que d\u00e1 errado. At\u00e9 que atrav\u00e9s de muita luta, perseveran\u00e7a, esfor\u00e7o, ele d\u00e1 a volta por cima, triunfa e mostra o caminho de um final feliz.\n\n\u00c9 muito raro se ver isso na vida real.\n\nMas Ronaldo teve uma carreira onde aconteceu exatamente isso.\n\nA admira\u00e7\u00e3o, a venera\u00e7\u00e3o que ele conquistou pelo mundo superam as conquistas dele no futebol. E foram muitas!\n\nRonaldo \u00e9 um exemplo de coisas muito boas. O talento, os gols, as vit\u00f3rias, os t\u00edtulos, o bom humor, a humildade e algo t\u00e3o brasileiro, o sorriso, nos mostram um mundo alegre, feliz.\n\nIsso \u00e9 Brasil. Isso \u00e9 Ronaldo.\n\n\u2014 MARCOS UCH\u00d4A", "en": "Ronaldinho. Ronaldo. The Phenomenon. How can a career transform so much?\n\nFrom being treated with warmth to becoming synonymous with a force of nature?\n\nWe all learn a great deal about the world through stories heard when we were children. Stories of princes, warriors, heroes. And in them there exists something like a formula, a pattern.\n\nThe hero is introduced with his virtues. But there is a moment in his life when he suffers greatly, when people doubt him, when he is shaken by so many things going wrong. Until, through great struggle, perseverance, and effort, he rises again, triumphs, and shows the path to a happy ending.\n\nIt is very rare to see this in real life.\n\nBut Ronaldo had a career where exactly that happened.\n\nThe admiration, the reverence he won around the world surpasses his achievements in football. And there were many!\n\nRonaldo is an example of very good things. The talent, the goals, the victories, the titles, the good humor, the humility, and something so Brazilian \u2014 the smile \u2014 show us a joyful, happy world.\n\nThat is Brazil. That is Ronaldo.\n\n\u2014 MARCOS UCH\u00d4A", "es": "Ronaldinho. Ronaldo. El Fen\u00f3meno. \u00bfC\u00f3mo puede transformarse tanto una carrera?\n\n\u00bfDe ser tratado con cari\u00f1o a convertirse en sin\u00f3nimo de una fuerza de la naturaleza?\n\nTodos aprendemos mucho sobre el mundo a trav\u00e9s de historias escuchadas cuando \u00e9ramos ni\u00f1os. Historias de pr\u00edncipes, de guerreros, de h\u00e9roes. Y en ellas existe una especie de f\u00f3rmula, de patr\u00f3n.\n\nEl h\u00e9roe nos es presentado con sus virtudes. Pero hay un momento en su vida en que sufre mucho, en que dudan de \u00e9l, en que se tambalea con tantas cosas que salen mal. Hasta que a trav\u00e9s de mucha lucha, perseverancia y esfuerzo, da la vuelta, triunfa y muestra el camino hacia un final feliz.\n\nEs muy raro ver esto en la vida real.\n\nPero Ronaldo tuvo una carrera en la que ocurri\u00f3 exactamente eso.\n\nLa admiraci\u00f3n, la veneraci\u00f3n que conquist\u00f3 por todo el mundo supera sus logros en el f\u00fatbol. \u00a1Y fueron muchos!\n\nRonaldo es un ejemplo de cosas muy buenas. El talento, los goles, las victorias, los t\u00edtulos, el buen humor, la humildad y algo tan brasile\u00f1o, la sonrisa, nos muestran un mundo alegre, feliz.\n\nEso es Brasil. Eso es Ronaldo.\n\n\u2014 MARCOS UCH\u00d4A"}}, {"id": "p02", "accent": "#0D2366", "ato": {"pt": "ATO 1 \u00b7 1976\u20131993", "en": "ACT 1 \u00b7 1976\u20131993", "es": "ACTO 1 \u00b7 1976\u20131993"}, "title": {"pt": "A ORIGEM", "en": "THE ORIGIN", "es": "EL ORIGEN"}, "narrator": {"name": "N\u00e9lio Naz\u00e1rio", "role": {"pt": "Pai do Ronaldo", "en": "Ronaldo's Father", "es": "Padre de Ronaldo"}}, "timeline": [{"yr": "1976", "pt": "Nasce em Bento Ribeiro", "en": "Born in Bento Ribeiro", "es": "Nace en Bento Ribeiro"}, {"yr": "1987", "pt": "Valqueire T\u00eanis Clube", "en": "Valqueire Tennis Club", "es": "Club Valqueire"}, {"yr": "1991", "pt": "Artilheiro Infantil S. Crist\u00f3v\u00e3o", "en": "Youth Top Scorer", "es": "Artillero Juvenil"}, {"yr": "1993", "pt": "Estreia no Cruzeiro", "en": "Debut at Cruzeiro", "es": "Debut en Cruzeiro"}], "text": {"pt": "Meu nome \u00e9 N\u00e9lio. Sou o pai do Ronaldo.\n\nEle nasceu no dia 18 de setembro de 1976. Mas est\u00e1 escrito 22 na certid\u00e3o \u2014 eu demorei pra registrar e perdi o prazo. At\u00e9 hoje o mundo comemora no dia errado. Coisa de pai.\n\nBento Ribeiro, zona norte do Rio. Tr\u00eas filhos, uma TV que vivia quebrada. Eu trabalhava na Telerj, t\u00e9cnico de cabos. Final de semana ia pro camel\u00f4 de Madureira pra fechar o m\u00eas. A S\u00f4nia voltava pra casa com os bra\u00e7os queimados de \u00f3leo quente. O Ronaldo passava pomada nos bra\u00e7os dela, fazia carinho, e prometia que um dia ia tirar ela daquela vida. Cumpriu.\n\nA gente n\u00e3o tinha quase nada. Mas ele tinha uma bola. E era s\u00f3 o que ele precisava.\n\nPor volta dos 11 anos eu levei ele pra fazer teste no Valqueire T\u00eanis Clube. A fila de ala estava lotada. A de piv\u00f4 tamb\u00e9m. A\u00ed ele foi pra fila do gol, porque era a menor. Passou no teste como goleiro. Pouco tempo depois mudou de posi\u00e7\u00e3o. Virou o artilheiro do time.\n\nLevei ele e o irm\u00e3o na geral do Maracan\u00e3 pra ver o Flamengo do Zico jogar. Um dia, na sa\u00edda do est\u00e1dio, o Ronaldo ficou esperando os jogadores na rua. Pediu aut\u00f3grafos, ningu\u00e9m quis dar aten\u00e7\u00e3o. A\u00ed o Zico apareceu. O Ronaldo pegou um santinho que tinha ca\u00eddo no ch\u00e3o e estendeu pro Zico. O Zico parou, sorriu, conversou com ele e assinou.\n\nEm 1993, com 16 anos, o Ronaldo estreou no Cruzeiro. Eu vi com meus olhos.\n\n\u2014 SEU N\u00c9LIO\nAntes do mundo saber, ele j\u00e1 sabia.", "en": "My name is N\u00e9lio. I'm Ronaldo's father.\n\nHe was born on September 18, 1976 \u2014 but the certificate says the 22nd. I was late registering and missed the deadline. To this day the whole world celebrates on the wrong day. That's fatherhood for you.\n\nBento Ribeiro, northern Rio. Three kids, a TV that was always broken. I worked at Telerj as a cable technician. Weekends I'd go sell at the Madureira market to make ends meet. S\u00f4nia came home with her arms burned from hot cooking oil. Ronaldo would rub ointment on her burns, hold her close, and promise that one day he'd take her away from that life. He kept his word.\n\nWe had almost nothing. But he had a ball. And that was all he needed.\n\nAround age 11, I took him for a tryout at Valqueire Tennis Club. The wing line was packed. The pivot line too. So he joined the goalkeeper line because it was shortest. He passed as a goalkeeper. Not long after, he changed positions. He became the team's top scorer.\n\nI took him and his brother to the Maracan\u00e3's popular stands to see Zico's Flamengo. One day, leaving the stadium, Ronaldo waited outside for the players. He asked for autographs \u2014 nobody paid him attention. Then Zico appeared. Ronaldo picked up a prayer card that had fallen on the ground and held it out to Zico. Zico stopped, smiled, talked with him, and signed.\n\nIn 1993, at 16, Ronaldo made his debut at Cruzeiro. I saw it with my own eyes.\n\n\u2014 SEU N\u00c9LIO\nBefore the world knew, he already knew.", "es": "Me llamo N\u00e9lio. Soy el padre de Ronaldo.\n\nNaci\u00f3 el 18 de septiembre de 1976 \u2014 pero en el certificado dice el d\u00eda 22. Tard\u00e9 en registrarlo y perd\u00ed el plazo. Hasta hoy el mundo lo celebra en el d\u00eda equivocado. Cosas de padre.\n\nBento Ribeiro, zona norte de R\u00edo. Tres hijos, una televisi\u00f3n siempre rota. Trabajaba en Telerj como t\u00e9cnico de cables. Los fines de semana iba al mercadillo de Madureira para llegar a fin de mes. S\u00f4nia volv\u00eda a casa con los brazos quemados por el aceite. Ronaldo le pon\u00eda pomada en las quemaduras, la consolaba y promet\u00eda que un d\u00eda la sacar\u00eda de esa vida. Cumpli\u00f3 su palabra.\n\nNo ten\u00edamos casi nada. Pero \u00e9l ten\u00eda una pelota. Y era todo lo que necesitaba.\n\nAlrededor de los 11 a\u00f1os lo llev\u00e9 a hacer una prueba en el Valqueire Tenis Club. La fila de ala estaba llena. La de pivote tambi\u00e9n. Entonces se puso en la fila de portero, que era la m\u00e1s corta. Pas\u00f3 la prueba como portero. Poco despu\u00e9s cambi\u00f3 de posici\u00f3n. Se convirti\u00f3 en el goleador del equipo.\n\nLo llev\u00e9 a \u00e9l y a su hermano al gallinero del Maracan\u00e1 a ver al Flamengo de Zico. Un d\u00eda, al salir del estadio, Ronaldo se qued\u00f3 esperando a los jugadores en la calle. Ped\u00eda aut\u00f3grafos y nadie le hac\u00eda caso. Entonces apareci\u00f3 Zico. Ronaldo recogi\u00f3 del suelo una estampita religiosa y se la extendi\u00f3. Zico se detuvo, sonri\u00f3, habl\u00f3 con \u00e9l y firm\u00f3.\n\nEn 1993, con 16 a\u00f1os, Ronaldo debut\u00f3 en Cruzeiro. Lo vi con mis propios ojos.\n\n\u2014 SEU N\u00c9LIO\nAntes de que el mundo lo supiera, \u00e9l ya lo sab\u00eda."}}, {"id": "p03", "accent": "#5A1200", "ato": {"pt": "ATO 2 \u00b7 1993\u20132001", "en": "ACT 2 \u00b7 1993\u20132001", "es": "ACTO 2 \u00b7 1993\u20132001"}, "title": {"pt": "ASCENS\u00c3O E QUEDA", "en": "RISE AND FALL", "es": "ASCENSO Y CA\u00cdDA"}, "narrator": {"name": "Zico", "role": {"pt": "Na alegria e na tristeza", "en": "In joy and in sorrow", "es": "En la alegr\u00eda y en la tristeza"}}, "timeline": [{"yr": "1994", "pt": "Copa do Mundo nos EUA", "en": "World Cup in the USA", "es": "Copa del Mundo en EEUU"}, {"yr": "1996", "pt": "FIFA World Player \u00b7 Barcelona", "en": "FIFA World Player \u00b7 Barcelona", "es": "FIFA World Player \u00b7 Barcelona"}, {"yr": "1997", "pt": "Inter de Mil\u00e3o \u00b7 2\u00ba T\u00edtulo FIFA", "en": "Inter Milan \u00b7 2nd FIFA Title", "es": "Inter de Mil\u00e1n \u00b7 2\u00ba T\u00edtulo"}], "text": {"pt": "Eu era o \u00eddolo daquele garoto. Soube depois. Nunca poderia imaginar que daria um aut\u00f3grafo pro futuro Fen\u00f4meno.\n\nEm 1993 chegou um pivete magro do Cruzeiro fazendo 58 gols em 60 jogos. Tinha 16 anos.\n\nEm 1994, com 17, foi pra Copa do Mundo nos Estados Unidos. Ficou no banco a Copa inteira. Voltou campe\u00e3o sem ter pisado em campo.\n\nEm 1996, com 20 anos, foi eleito o melhor jogador do mundo pela FIFA. Em 1997 ganhou de novo \u2014 com a Bola de Ouro junto. PSV, Barcelona, Inter. Tudo numa velocidade que ningu\u00e9m viu antes.\n\nE a\u00ed veio 1998. Dia 12 de julho, em Paris, antes da final. Convuls\u00e3o no quarto do hotel. Ningu\u00e9m entendeu. Os m\u00e9dicos n\u00e3o entenderam. Ele jogou assim mesmo. Brasil perdeu de 3 a 0.\n\nEu estava no banco, vendo aquilo. Mas eu olhava pra aquele menino e sentia que um dia ainda ia ligar pra ele e dizer: Voc\u00ea sabe o que voc\u00ea passou. E a\u00ed Deus te deu essa oportunidade.\n\nEu n\u00e3o sabia quando. S\u00f3 sabia que esse dia ia chegar.\n\nEm novembro de 99, o joelho rompeu em Mil\u00e3o, contra o Lecce. Cinco meses depois, na final da Copa da It\u00e1lia, rompeu de novo. O mundo inteiro achou que era o fim.\n\nBastou um pra mostrar que n\u00e3o era.\n\n\u2014 ZICO\nNa alegria e na tristeza.", "en": "I was that boy's idol. I found out later. I never could have imagined I'd be giving an autograph to the future Phenomenon.\n\nIn 1993 a skinny teenager arrived from Cruzeiro with 58 goals in 60 games. He was 16.\n\nAt 17, he went to the World Cup in the United States. He sat on the bench the entire tournament. He came back as a champion without setting foot on the pitch.\n\nAt 20, he was named the world's best player by FIFA. In 1997 he won again \u2014 this time with the Ballon d'Or as well. PSV, Barcelona, Inter. All at a pace nobody had ever seen before.\n\nAnd then came 1998. July 12, in Paris, before the final. A seizure in the hotel room. Nobody understood. The doctors didn't understand. He played anyway. Brazil lost 3 to 0.\n\nI was on the bench watching. But I looked at that boy and felt that someday I'd still call him and say: You know what you went through. And God gave you this opportunity.\n\nI didn't know when. I only knew that day would come.\n\nIn November 1999, his knee gave out in Milan, against Lecce. Five months later, in the Italian Cup final, it gave out again. The whole world thought it was the end.\n\nIt only took one man to show it wasn't.\n\n\u2014 ZICO\nIn joy and in sorrow.", "es": "Yo era el \u00eddolo de aquel chico. Me enter\u00e9 despu\u00e9s. Jam\u00e1s hubiera imaginado que le dar\u00eda un aut\u00f3grafo al futuro Fen\u00f3meno.\n\nEn 1993 lleg\u00f3 un joven flacucho del Cruzeiro con 58 goles en 60 partidos. Ten\u00eda 16 a\u00f1os.\n\nCon 17, fue al Mundial de Estados Unidos. Estuvo en el banquillo todo el torneo. Volvi\u00f3 campe\u00f3n sin haber pisado el campo.\n\nCon 20 a\u00f1os, fue elegido el mejor jugador del mundo por la FIFA. En 1997 gan\u00f3 de nuevo \u2014 esta vez con el Bal\u00f3n de Oro tambi\u00e9n. PSV, Barcelona, Inter. Todo a una velocidad que nadie hab\u00eda visto antes.\n\nY lleg\u00f3 1998. El 12 de julio, en Par\u00eds, antes de la final. Un episodio en el hotel la noche anterior. Nadie lo entendi\u00f3. Los m\u00e9dicos no lo entendieron. Jug\u00f3 de todas formas. Brasil perdi\u00f3 3 a 0.\n\nYo estaba en el banquillo viendo aquello. Pero miraba a aquel chico y sent\u00eda que alg\u00fan d\u00eda lo llamar\u00eda para decirle: Sabes lo que pasaste. Y Dios te dio esta oportunidad.\n\nNo sab\u00eda cu\u00e1ndo. Solo sab\u00eda que ese d\u00eda llegar\u00eda.\n\nEn noviembre de 1999, la rodilla cedi\u00f3 en Mil\u00e1n, contra el Lecce. Cinco meses despu\u00e9s, en la final de la Copa de Italia, cedi\u00f3 de nuevo. El mundo entero pens\u00f3 que era el final.\n\nBast\u00f3 uno para demostrar que no lo era.\n\n\u2014 ZICO\nEn la alegr\u00eda y en la tristeza."}}, {"id": "p04", "accent": "#1A0A00", "ato": {"pt": "1998 \u00b7 1999 \u00b7 2001", "en": "1998 \u00b7 1999 \u00b7 2001", "es": "1998 \u00b7 1999 \u00b7 2001"}, "title": {"pt": "A QUEDA E A VOLTA", "en": "THE FALL AND THE RETURN", "es": "LA CA\u00cdDA Y EL REGRESO"}, "narrator": {"name": "", "role": {"pt": "", "en": "", "es": ""}}, "timeline": [{"yr": "1998", "pt": "Final da Copa em Paris", "en": "World Cup Final in Paris", "es": "Final del Mundial en Par\u00eds"}, {"yr": "1999", "pt": "Les\u00e3o \u2014 mesmo joelho", "en": "Injury \u2014 same knee", "es": "Lesi\u00f3n \u2014 misma rodilla"}, {"yr": "2001", "pt": "Terceira cirurgia \u00b7 Recupera\u00e7\u00e3o", "en": "Third surgery \u00b7 Recovery", "es": "Tercera cirug\u00eda \u00b7 Recuperaci\u00f3n"}], "text": {"pt": "Final da Copa em Paris. 12 de julho de 1998. Na v\u00e9spera, Ronaldo convulsionou no quarto do hotel. Jogou assim mesmo. O Brasil perdeu. Ningu\u00e9m entendeu o que aconteceu.\n\nEm novembro de 1999, contra o Lecce, o tend\u00e3o do joelho rompeu. Cinco meses depois, na final da Copa da It\u00e1lia, rompeu de novo.\n\nDois anos fora. Dois retornos tentados. Um joelho operado tr\u00eas vezes.\n\nO mundo inteiro achou que era o fim.\n\nMas em maio de 2002, Luiz Felipe Scolari olhou pra ele e disse: Tu \u00e9 meu camisa 9. Titular. N\u00e3o tem discuss\u00e3o.\n\nHavia gente que duvidava. Havia jornalista que escrevia que era loucura.\n\nEle pouco se importou.\n\n\u2014 O FEN\u00d4MENO ESTAVA DE VOLTA", "en": "World Cup Final in Paris. July 12, 1998. The night before, Ronaldo had a seizure in his hotel room. He played anyway. Brazil lost. No one understood what had happened.\n\nIn November 1999, against Lecce, the knee tendon gave out. Five months later, in the Italian Cup final, it gave out again.\n\nTwo years out. Two attempted comebacks. One knee operated on three times.\n\nThe whole world thought it was the end.\n\nBut in May 2002, Luiz Felipe Scolari looked at him and said: You're my number 9. Starting. No discussion.\n\nThere were people who doubted. There were journalists who wrote that it was madness.\n\nHe didn't care much.\n\n\u2014 THE PHENOMENON WAS BACK", "es": "Final del Mundial en Par\u00eds. 12 de julio de 1998. La noche anterior, Ronaldo tuvo un episodio en su habitaci\u00f3n del hotel. Jug\u00f3 de todas formas. Brasil perdi\u00f3. Nadie entendi\u00f3 qu\u00e9 hab\u00eda pasado.\n\nEn noviembre de 1999, contra el Lecce, el tend\u00f3n de la rodilla cedi\u00f3. Cinco meses despu\u00e9s, en la final de la Copa de Italia, cedi\u00f3 de nuevo.\n\nDos a\u00f1os fuera. Dos intentos de regreso. Una rodilla operada tres veces.\n\nEl mundo entero pens\u00f3 que era el final.\n\nPero en mayo de 2002, Luiz Felipe Scolari lo mir\u00f3 y dijo: Eres mi n\u00famero 9. Titular. Sin discusi\u00f3n.\n\nHab\u00eda gente que dudaba. Hab\u00eda periodistas que escrib\u00edan que era una locura.\n\nLe import\u00f3 bien poco.\n\n\u2014 EL FEN\u00d3MENO HAB\u00cdA VUELTO"}}, {"id": "p05", "accent": "#7A4A00", "ato": {"pt": "ATO 3 \u00b7 2002\u20132007", "en": "ACT 3 \u00b7 2002\u20132007", "es": "ACTO 3 \u00b7 2002\u20132007"}, "title": {"pt": "O FEN\u00d4MENO", "en": "THE PHENOMENON", "es": "EL FEN\u00d3MENO"}, "narrator": {"name": "Luiz Felipe Scolari", "role": {"pt": "T\u00e9cnico \u00b7 Copa 2002", "en": "Coach \u00b7 2002 World Cup", "es": "Entrenador \u00b7 Copa 2002"}}, "timeline": [{"yr": "2002", "pt": "Final \u00b7 Yokohama \u00b7 2 gols", "en": "Final \u00b7 Yokohama \u00b7 2 goals", "es": "Final \u00b7 Yokohama \u00b7 2 goles"}, {"yr": "2003", "pt": "Real Madrid \u00b7 Gal\u00e1cticos", "en": "Real Madrid \u00b7 Gal\u00e1cticos", "es": "Real Madrid \u00b7 Gal\u00e1cticos"}, {"yr": "2006", "pt": "15 gols \u00b7 Recorde hist\u00f3rico", "en": "15 goals \u00b7 All-time record", "es": "15 goles \u00b7 R\u00e9cord hist\u00f3rico"}], "text": {"pt": "Tu \u00e9 meu camisa 9. Titular. N\u00e3o tem discuss\u00e3o.\n\nFoi isso que eu falei pro Ronaldo em maio de 2002. Tinha gente na CBF que duvidava. Tinha jornalista escrevendo que era loucura. Ele tinha passado quase dois anos longe dos gramados, com o mesmo joelho operado tr\u00eas vezes. Eu pouco me importei.\n\nCheguei em Yokohama no dia 30 de junho. Final contra a Alemanha. No vesti\u00e1rio ele tava quieto, daquele jeito dele. Olhei nos olhos e disse: Joga sem medo. Hoje \u00e9 teu dia.\n\nPrimeiro gol \u2014 o Rivaldo bateu, o Kahn deu rebote. Ele empurrou pro fundo. Segundo gol \u2014 o corta-luz do Rivaldo. Ele dominou e mandou no canto.\n\nEle veio correndo pro banco. Gritou meu nome. Felip\u00e3o! Pulou no meu pesco\u00e7o. Eu vi de perto a cara de um homem que tinha voltado dos mortos.\n\nQuatro anos antes, em Paris, eu tinha visto pela TV. Como todo brasileiro. Aquele garoto sentado no vesti\u00e1rio sem entender o que tinha acontecido no corpo dele.\n\nEm 2002, foi diferente. Eu tava ali do lado. E quando ele veio correndo gritar meu nome, foi como se o Brasil inteiro tivesse voltado junto.\n\nEu assinei embaixo da maior virada do esporte brasileiro. E faria tudo de novo.\n\n\u2014 FELIP\u00c3O\nFaltava acreditar. Ele acreditou.", "en": "You're my number 9. Starting. No discussion.\n\nThat's what I told Ronaldo in May 2002. There were people at the CBF who doubted it. There were journalists writing it was madness. He had been away from the pitch for nearly two years, the same knee operated on three times. I didn't much care.\n\nI arrived in Yokohama on June 30. Final against Germany. In the dressing room he was quiet, in that way of his. I looked him in the eyes and said: Play without fear. Today is your day.\n\nFirst goal \u2014 Rivaldo shot, Kahn gave up the rebound. He pushed it in. Second goal \u2014 Rivaldo's dummy. He controlled it and put it in the corner.\n\nHe came running to the bench. He shouted my name. Felip\u00e3o! He leapt onto my neck. I saw up close the face of a man who had come back from the dead.\n\nFour years earlier, in Paris, I had watched on television. Like every Brazilian. That boy sitting in the dressing room not understanding what had happened to his own body.\n\nIn 2002, it was different. I was right there beside him. And when he came running to shout my name, it was as if the whole of Brazil had come back together.\n\nI put my name to the greatest comeback in Brazilian sport. And I'd do it all over again.\n\n\u2014 FELIP\u00c3O\nAll it took was faith. He had it.", "es": "Eres mi n\u00famero 9. Titular. Sin discusi\u00f3n.\n\nEso fue lo que le dije a Ronaldo en mayo de 2002. Hab\u00eda gente en la CBF que dudaba. Hab\u00eda periodistas escribiendo que era una locura. Hab\u00eda pasado casi dos a\u00f1os alejado de los campos, con la misma rodilla operada tres veces. Me import\u00f3 bien poco.\n\nLlegu\u00e9 a Yokohama el 30 de junio. Final contra Alemania. En el vestuario estaba callado, a su manera. Lo mir\u00e9 a los ojos y le dije: Juega sin miedo. Hoy es tu d\u00eda.\n\nPrimer gol \u2014 Rivaldo dispar\u00f3, Kahn dio el rebote. Lo empuj\u00f3 dentro. Segundo gol \u2014 el amago de Rivaldo. Lo control\u00f3 y lo mand\u00f3 a la escuadra.\n\nVino corriendo al banquillo. Grit\u00f3 mi nombre. \u00a1Felip\u00e3o! Se lanz\u00f3 a mi cuello. Vi de cerca la cara de un hombre que hab\u00eda vuelto de entre los muertos.\n\nCuatro a\u00f1os antes, en Par\u00eds, lo hab\u00eda visto por televisi\u00f3n. Como todo brasile\u00f1o. Aquel chico sentado en el vestuario sin entender qu\u00e9 le hab\u00eda pasado en el cuerpo.\n\nEn 2002, fue diferente. Estaba justo a su lado. Y cuando vino corriendo a gritar mi nombre, fue como si todo Brasil hubiera vuelto junto.\n\nFirm\u00e9 el mayor regreso del deporte brasile\u00f1o. Y lo volver\u00eda a hacer todo.\n\n\u2014 FELIP\u00c3O\nSolo faltaba creer. \u00c9l crey\u00f3."}}, {"id": "p06", "accent": "#1C1C1C", "ato": {"pt": "ATO 4 \u00b7 2007\u20132011", "en": "ACT 4 \u00b7 2007\u20132011", "es": "ACTO 4 \u00b7 2007\u20132011"}, "title": {"pt": "O HOMEM", "en": "THE MAN", "es": "EL HOMBRE"}, "narrator": {"name": "David Beckham", "role": {"pt": "Companheiro no Real Madrid", "en": "Real Madrid teammate", "es": "Compa\u00f1ero en el Real Madrid"}}, "timeline": [{"yr": "2003", "pt": "Real Madrid \u00b7 Gal\u00e1cticos", "en": "Real Madrid \u00b7 Gal\u00e1cticos", "es": "Real Madrid \u00b7 Gal\u00e1cticos"}, {"yr": "2008", "pt": "Les\u00e3o \u00b7 AC Milan \u00b7 3\u00aa cirurgia", "en": "Injury \u00b7 AC Milan \u00b7 3rd surgery", "es": "Lesi\u00f3n \u00b7 AC Milan \u00b7 3\u00aa cirug\u00eda"}, {"yr": "2009", "pt": "Campe\u00e3o \u00b7 Corinthians \u00b7 32 anos", "en": "Champion \u00b7 Corinthians \u00b7 age 32", "es": "Campe\u00f3n \u00b7 Corinthians \u00b7 32 a\u00f1os"}, {"yr": "2011", "pt": "Aposentadoria", "en": "Retirement", "es": "Retirada"}], "text": {"pt": "O \u00eddolo precisou virar homem.\n\nEu joguei com o Ronaldo no Real Madrid.\n\nQuando cheguei, em 2003, levei um tempo pra me adaptar. A Espanha era outra l\u00edngua, outra cultura, um novo lugar pra mim e pra minha fam\u00edlia chamar de casa. Foi o Ronaldo quem me acolheu e ajudou a todos n\u00f3s. Aquele sorriso, a mesma alegria simples de sempre, sem pose de estrela. Ele nos chamava pra um churrasco, me ensinou a tomar guaran\u00e1, me apresentou o Brasil dentro da Espanha, ajudou minha fam\u00edlia a se ambientar.\n\nGal\u00e1cticos: Zidane, Figo, Roberto Carlos, Ra\u00fal, ele e eu. Um vesti\u00e1rio cheio de Bolas de Ouro. E o jogador mais dif\u00edcil de marcar de todos era o brasileiro. Eu jogava ao lado dele e ainda parava pra v\u00ea-lo jogar.\n\nEm 2002 tinha sido o artilheiro da Copa com 8 gols e levado a Chuteira de Ouro. Em 2006 ele foi pra Alemanha e se tornou o maior artilheiro da hist\u00f3ria das Copas do Mundo, com 15 gols. A Chuteira de Bronze no bolso.\n\nEm 2007 ele foi para o Milan. Em fevereiro de 2008, contra o Livorno, o tend\u00e3o patelar do joelho esquerdo rompeu. A terceira les\u00e3o grave em dez anos. Liguei pra ele naquela noite. Ele atendeu rindo. Disse: Eu vou voltar.\n\nE voltou. Foi para o Corinthians em 2009 e foi campe\u00e3o aos 32 anos, jogando com o joelho enfaixado. Em fevereiro de 2011 ele anunciou a aposentadoria, em l\u00e1grimas, na televis\u00e3o.\n\nEu chorei assistindo de casa.\n\nSomos amigos para a vida toda. Tudo o que passamos juntos fica comigo para sempre.\n\nRonaldo \u00e9 o jogador mais completo que eu j\u00e1 vi. Mas o que eu mais admiro \u00e9 o homem.\n\n\u2014 DAVID BECKHAM\nGal\u00e1cticos no est\u00e1dio. Em casa, churrasco e guaran\u00e1.", "en": "The idol had to become a man.\n\nI played with Ronaldo at Real Madrid.\n\nWhen I arrived in 2003, it took me a while to adjust. Spain was another language, another culture, a new place for me and my family to call home. It was Ronaldo who welcomed us and helped us all. That smile, the same simple joy as always, no rock-star attitude. He would invite us to a barbecue, taught me to drink guaran\u00e1, introduced Brazil to us from within Spain, helped my family settle in.\n\nGal\u00e1cticos: Zidane, Figo, Roberto Carlos, Ra\u00fal, him and me. A dressing room full of Ballon d'Or winners. And the hardest player to mark of all of them was the Brazilian. I played alongside him and still stopped to watch him play.\n\nIn 2002 he had been the World Cup's top scorer with 8 goals and won the Golden Boot. In 2006 he went to Germany and became the greatest scorer in World Cup history, with 15 goals. The Bronze Boot in his pocket.\n\nIn 2007 he moved to Milan. In February 2008, against Livorno, the patellar tendon in his left knee snapped. The third serious injury in ten years. I called him that night. He answered laughing. Said: I'm going to come back.\n\nAnd he did. He joined Corinthians in 2009 and won the title at 32, playing with his knee bandaged. In February 2011 he announced his retirement, in tears, on television.\n\nI cried watching from home.\n\nWe are friends for life. Everything we went through together stays with me forever.\n\nRonaldo is the most complete player I have ever seen. But what I admire most is the man.\n\n\u2014 DAVID BECKHAM\nGal\u00e1cticos on the pitch. At home, barbecue and guaran\u00e1.", "es": "El \u00eddolo tuvo que convertirse en hombre.\n\nJugu\u00e9 con Ronaldo en el Real Madrid.\n\nCuando llegu\u00e9, en 2003, me cost\u00f3 tiempo adaptarme. Espa\u00f1a era otro idioma, otra cultura, un nuevo lugar para m\u00ed y mi familia. Fue Ronaldo quien nos acogi\u00f3 y ayud\u00f3 a todos. Esa sonrisa, la misma alegr\u00eda simple de siempre, sin poses de estrella. Nos invitaba a un asado, me ense\u00f1\u00f3 a tomar guaran\u00e1, me present\u00f3 Brasil desde dentro de Espa\u00f1a, ayud\u00f3 a mi familia a adaptarse.\n\nGal\u00e1cticos: Zidane, Figo, Roberto Carlos, Ra\u00fal, \u00e9l y yo. Un vestuario lleno de Balones de Oro. Y el jugador m\u00e1s dif\u00edcil de marcar de todos era el brasile\u00f1o. Jugaba a su lado y aun as\u00ed me deten\u00eda a verlo jugar.\n\nEn 2002 hab\u00eda sido el goleador del Mundial con 8 goles y se llev\u00f3 la Bota de Oro. En 2006 fue a Alemania y se convirti\u00f3 en el mayor goleador de la historia de los Mundiales, con 15 goles. La Bota de Bronce en el bolsillo.\n\nEn 2007 fue al Milan. En febrero de 2008, contra el Livorno, el tend\u00f3n rotuliano de la rodilla izquierda se rompi\u00f3. La tercera lesi\u00f3n grave en diez a\u00f1os. Lo llam\u00e9 esa noche. Respondi\u00f3 riendo. Dijo: Voy a volver.\n\nY volvi\u00f3. Fue al Corinthians en 2009 y fue campe\u00f3n a los 32 a\u00f1os, jugando con la rodilla vendada. En febrero de 2011 anunci\u00f3 su retirada, entre l\u00e1grimas, en televisi\u00f3n.\n\nYo llor\u00e9 vi\u00e9ndolo desde casa.\n\nSomos amigos para toda la vida. Todo lo que pasamos juntos se queda conmigo para siempre.\n\nRonaldo es el jugador m\u00e1s completo que he visto en mi vida. Pero lo que m\u00e1s admiro es al hombre.\n\n\u2014 DAVID BECKHAM\nGal\u00e1cticos en el estadio. En casa, asado y guaran\u00e1."}}, {"id": "p07", "accent": "#1A3A1A", "ato": {"pt": "ATO 5 \u00b7 2012\u20132026", "en": "ACT 5 \u00b7 2012\u20132026", "es": "ACTO 5 \u00b7 2012\u20132026"}, "title": {"pt": "DE VOLTA PRA CASA", "en": "COMING HOME", "es": "DE VUELTA A CASA"}, "narrator": {"name": "Dona S\u00f4nia", "role": {"pt": "M\u00e3e", "en": "Mother", "es": "Madre"}}, "timeline": [{"yr": "2012", "pt": "Funda\u00e7\u00e3o Fen\u00f4menos", "en": "Fen\u00f4menos Foundation", "es": "Fundaci\u00f3n Fen\u00f4menos"}, {"yr": "2019", "pt": "Globe Soccer Awards \u00b7 Real Valladolid", "en": "Globe Soccer Awards \u00b7 Real Valladolid", "es": "Globe Soccer Awards \u00b7 Real Valladolid"}, {"yr": "2022", "pt": "Volta ao Cruzeiro", "en": "Return to Cruzeiro", "es": "Regreso al Cruzeiro"}, {"yr": "2026", "pt": "Casa Rede Ronaldo \u00b7 Miami", "en": "Casa Rede Ronaldo \u00b7 Miami", "es": "Casa Rede Ronaldo \u00b7 Miami"}], "text": {"pt": "Eu sou a S\u00f4nia. Sou a m\u00e3e do Ronaldo.\n\nQuando ele parou de jogar, em 2011, eu pensei que finalmente ele ia descansar. Que nada. O Ronaldo nunca soube ficar parado.\n\nEm 2018 virou presidente do Real Valladolid na Espanha. Em 2019, ganhou o Globe Soccer Awards pelo conjunto da obra. Em 2022 voltou pro Cruzeiro, onde tudo come\u00e7ou. Em 2023 casou com a Celina em Ibiza. Deixou a marca dele na forma de gerir o futebol. Virou CEO, produtor, investidor. Se apaixonou pelo t\u00eanis, se aventurou no surf e no padel. E segue assim, sempre aprendendo, sempre se reinventando.\n\nE no meio disso tudo, ele continuou sendo o meu filho.\n\nA gente viveu muita coisa boa e muita coisa dif\u00edcil. Vi ele ser xingado pelo mundo num dia e amado no outro. Sempre se levantou. Sempre voltou. Sempre rindo de alguma coisa.\n\nO que mais me orgulha n\u00e3o est\u00e1 em nenhum t\u00edtulo ou pr\u00eamio que voc\u00eas viram aqui. O que mais me orgulha \u00e9 o tipo de pessoa que ele \u00e9.\n\nO Ronaldo \u00e9 simples. Sabe juntar gente. Os amigos da inf\u00e2ncia nunca sa\u00edram da mesa dele. Os amigos do futebol entraram. Os amigos do mundo todo entraram. Presidente, pedreiro, jogador, jornalista, vizinho. Todo mundo cabe. Ele \u00e9 assim, agregador, generoso, de cora\u00e7\u00e3o aberto. Festa do Ronaldo \u00e9 mesa grande. Sempre foi, e continua sendo.\n\nLutou pelos dele a vida inteira. Quando o primeiro dinheiro chegou, cuidou da fam\u00edlia primeiro. Comprou casa pra mim, pros irm\u00e3os, pagou estudo pros sobrinhos. Nunca esqueceu de ningu\u00e9m.\n\nUm dia ele criou uma funda\u00e7\u00e3o pra cuidar de gente. A miss\u00e3o \u00e9 a cara dele: encontrar fen\u00f4menos espalhados por todo canto do Brasil, gente cheia de talento e sem oportunidade, e dar for\u00e7a pra essa gente. J\u00e1 s\u00e3o 15 anos nisso. Mais de 750 mil pessoas alcan\u00e7adas pelos projetos parceiros, e mais de 250 lideran\u00e7as formadas, em todos os estados do Brasil.\n\nEu olho pra ele hoje e entendo uma coisa: o Ronaldo nunca foi s\u00f3 meu. Ele \u00e9 do povo. Sempre foi. Todo mundo quer chegar perto, e ele deixa. Todo mundo quer um abra\u00e7o, uma foto, uma palavra, e ele d\u00e1. Ele ama ser amado. Ele nasceu pra isso. Ele nasceu pra ser o Ronaldo.\n\nCinquenta anos do meu menino.\n\n\u2014 DONA S\u00d4NIA\nDeu \u00e0 luz ao Ronaldo. E foi a raz\u00e3o do Fen\u00f4meno existir.", "en": "I'm S\u00f4nia. I'm Ronaldo's mother.\n\nWhen he stopped playing, in 2011, I thought he was finally going to rest. Not a chance. Ronaldo never knew how to stay still.\n\nIn 2018 he became president of Real Valladolid in Spain. In 2019, he won the Globe Soccer Awards for his overall career. In 2022 he returned to Cruzeiro, where it all began. In 2023 he married Celina in Ibiza. He left his mark on the way football is managed. He became a CEO, producer, investor. He fell in love with tennis, ventured into surfing and padel. And he keeps going \u2014 always learning, always reinventing himself.\n\nAnd through all of that, he kept being my son.\n\nWe lived many good things and many hard things. I saw the world boo him one day and adore him the next. He always got back up. Always came back. Always laughing at something.\n\nWhat makes me proudest is not in any title or prize you've seen here. What makes me proudest is the kind of person he is.\n\nRonaldo is simple. He knows how to bring people together. His childhood friends never left the table. His football friends joined. His friends from all over the world joined. President, bricklayer, footballer, journalist, neighbour \u2014 everyone fits. That's how he is: inclusive, generous, open-hearted. Ronaldo's party has a big table. Always has, and still does.\n\nHe fought for his loved ones his whole life. When the first money arrived, he took care of his family first. He bought a house for me, for his siblings, paid for his nephews' schooling. He never forgot anyone.\n\nOne day he created a foundation to take care of people. The mission is just like him: to find fen\u00f4menos scattered all over Brazil, people full of talent without opportunity, and give them strength. It's been 15 years now. Over 750,000 people reached through partner projects, and more than 250 leaders developed, across every state in Brazil.\n\nI look at him today and understand one thing: Ronaldo was never just mine. He belongs to the people. Always did. Everyone wants to get close, and he lets them. Everyone wants a hug, a photo, a word, and he gives it. He loves to be loved. He was born for that. He was born to be Ronaldo.\n\nFifty years of my boy.\n\n\u2014 DONA S\u00d4NIA\nShe gave birth to Ronaldo. And was the reason the Phenomenon exists.", "es": "Soy S\u00f4nia. Soy la madre de Ronaldo.\n\nCuando dej\u00f3 de jugar, en 2011, pens\u00e9 que por fin iba a descansar. Nada. Ronaldo nunca supo estar quieto.\n\nEn 2018 se convirti\u00f3 en presidente del Real Valladolid en Espa\u00f1a. En 2019 gan\u00f3 el Globe Soccer Awards por el conjunto de su obra. En 2022 volvi\u00f3 al Cruzeiro, donde todo comenz\u00f3. En 2023 se cas\u00f3 con Celina en Ibiza. Dej\u00f3 su huella en la forma de gestionar el f\u00fatbol. Se convirti\u00f3 en CEO, productor, inversor. Se enamor\u00f3 del tenis, se aventur\u00f3 en el surf y el p\u00e1del. Y sigue as\u00ed, siempre aprendiendo, siempre reinvent\u00e1ndose.\n\nY en medio de todo eso, sigui\u00f3 siendo mi hijo.\n\nVivimos muchas cosas buenas y muchas cosas dif\u00edciles. Vi que el mundo lo silbaba un d\u00eda y lo adoraba al siguiente. Siempre se levant\u00f3. Siempre volvi\u00f3. Siempre ri\u00e9ndose de algo.\n\nLo que m\u00e1s me enorgullece no est\u00e1 en ning\u00fan t\u00edtulo ni premio que hayan visto aqu\u00ed. Lo que m\u00e1s me enorgullece es el tipo de persona que es.\n\nRonaldo es sencillo. Sabe juntar gente. Los amigos de la infancia nunca se fueron de su mesa. Los amigos del f\u00fatbol entraron. Los amigos del mundo entero entraron. Presidente, alba\u00f1il, futbolista, periodista, vecino \u2014 todo el mundo tiene cabida. As\u00ed es \u00e9l: integrador, generoso, de coraz\u00f3n abierto. La fiesta de Ronaldo tiene una mesa grande. Siempre fue as\u00ed, y sigue siendo as\u00ed.\n\nLuch\u00f3 por los suyos toda la vida. Cuando lleg\u00f3 el primer dinero, cuid\u00f3 de la familia primero. Compr\u00f3 casa para m\u00ed, para sus hermanos, pag\u00f3 los estudios de sus sobrinos. Nunca olvid\u00f3 a nadie.\n\nUn d\u00eda cre\u00f3 una fundaci\u00f3n para cuidar de la gente. La misi\u00f3n es igualita a \u00e9l: encontrar fen\u00f4menos repartidos por todo Brasil, gente llena de talento sin oportunidad, y darles fuerza. Lleva 15 a\u00f1os en esto. M\u00e1s de 750.000 personas alcanzadas a trav\u00e9s de proyectos asociados, y m\u00e1s de 250 l\u00edderes formados en todos los estados de Brasil.\n\nLo miro hoy y entiendo una cosa: Ronaldo nunca fue solo m\u00edo. Es del pueblo. Siempre lo fue. Todo el mundo quiere acercarse, y \u00e9l lo permite. Todo el mundo quiere un abrazo, una foto, una palabra, y \u00e9l los da. Le encanta que le quieran. Naci\u00f3 para eso. Naci\u00f3 para ser Ronaldo.\n\nCincuenta a\u00f1os de mi ni\u00f1o.\n\n\u2014 DONA S\u00d4NIA\nDio a luz a Ronaldo. Y fue la raz\u00f3n de que el Fen\u00f3meno existiera."}}, {"id": "p08", "accent": "#2226FF", "ato": {"pt": "FEN\u00d4MENO 50 ANOS", "en": "THE PHENOMENON 50 YEARS", "es": "FEN\u00d3MENO 50 A\u00d1OS"}, "title": {"pt": "EM NOME DO N\u00d3S", "en": "ON BEHALF OF US", "es": "EN NOMBRE DE NOSOTROS"}, "narrator": {"name": "Os Filhos", "role": {"pt": "Ronald \u00b7 Alex \u00b7 Maria Sophia \u00b7 Maria Alice", "en": "Ronald \u00b7 Alex \u00b7 Maria Sophia \u00b7 Maria Alice", "es": "Ronald \u00b7 Alex \u00b7 Maria Sophia \u00b7 Maria Alice"}}, "timeline": [], "text": {"pt": "Em nome do n\u00f3s, irm\u00e3os e irm\u00e3s.\n(Alex, Maria Alice, Maria Sophia, e Ronald)\n\nCrescer sendo filho do \"Fen\u00f4meno\" \u00e9 diferente. De um jeito que s\u00f3 a gente sabe.\n\nO Alex chegou um pouco depois na fam\u00edlia. E quando chegou, meu pai botou a gente numa sala de videogame e falou: se conhe\u00e7am a\u00ed, brinquem. E foi o que a gente fez. Rindo do que s\u00f3 irm\u00e3o ri.\n\nA gente n\u00e3o cresceu embaixo do mesmo teto. Mas fomos todos criados juntos, existe uma cumplicidade entre n\u00f3s que n\u00e3o precisa de explica\u00e7\u00e3o. S\u00f3 a gente sabe as dores de carregar esse nome, e s\u00f3 a gente sabe as del\u00edcias.\n\nVideogames, desenhos, super poderes. Essas hist\u00f3rias de her\u00f3is imposs\u00edveis, sempre fizeram parte do nosso universo. A gente n\u00e3o sabia, mas esse universo virou a semente de algo muito maior. Foi exatamente ali, com o meu pai jogando com os f\u00e3s num momento de incerteza em todo o planeta, que nasceu a Rede Ronaldo. O que come\u00e7ou na sala de casa virou tudo isso que voc\u00eas est\u00e3o vendo hoje.\n\nE tem uma coisa que a gente precisa falar: temos muito orgulho em sermos filhos do nosso pai. Quando estamos fora do Brasil e algu\u00e9m descobre que somos brasileiros, as pessoas j\u00e1 falam \"Ronaldo Naz\u00e1rio\". E quando descobrem que somos filhos dele, o impacto sempre nos surpreende. O brilho nos olhos de quem descobre, o amor que voc\u00eas sentem pelo nosso pai, tudo isso transborda e ainda nos encontra. Somos muito felizes por isso.\n\nA Vov\u00f3 (Dona S\u00f4nia) j\u00e1 disse o que a gente sempre soube. A maior conquista do nosso pai n\u00e3o estava em nenhuma vitrine. Estava no que ele nos ensinou sem precisar falar.\n\nQue cair faz parte. Que levantar \u00e9 uma escolha. E que a supera\u00e7\u00e3o n\u00e3o \u00e9 um dom, \u00e9 a resposta de quem recusou ficar parado.\n\nEnt\u00e3o se for pra sair dessa experi\u00eancia levando algo, que seja isso.\n\nN\u00e3o \u00e9 a hist\u00f3ria dele que voc\u00ea carrega. \u00c9 a sua.\n\nCom amor,\nRonald, Alex, Maria Sophia e Maria Alice Naz\u00e1rio", "en": "On behalf of us, brothers and sisters.\n(Alex, Maria Alice, Maria Sophia, and Ronald)\n\nGrowing up as the child of the \"Phenomenon\" is different. In a way that only we know.\n\nAlex arrived a little later in the family. And when he arrived, our dad put us in a video game room and said: get to know each other, play. And that's what we did. Laughing at things only siblings laugh at.\n\nWe didn't grow up under the same roof. But we were all raised together \u2014 there's a closeness between us that needs no explanation. Only we know the weight of carrying this name, and only we know its joys.\n\nVideo games, cartoons, superpowers. These stories of impossible heroes were always part of our world. We didn't know it then, but that world became the seed of something much bigger. It was exactly there, with our dad playing with fans in a moment of uncertainty across the whole planet, that Rede Ronaldo was born. What started in the living room has become everything you see here today.\n\nAnd there's one thing we need to say: we are very proud to be our father's children. When we are outside Brazil and someone discovers we're Brazilian, people already say \"Ronaldo Naz\u00e1rio\". And when they discover we're his children, the impact always surprises us. The sparkle in the eyes of those who find out, the love you all feel for our father \u2014 it overflows and still finds us. We are very happy for that.\n\nGrandma (Dona S\u00f4nia) already said what we always knew. Our father's greatest achievement was not in any display case. It was in what he taught us without ever needing to say it.\n\nThat falling is part of it. That getting back up is a choice. And that overcoming is not a gift \u2014 it is the answer of those who refused to stay down.\n\nSo if you're going to walk away from this experience taking something with you, let it be this.\n\nIt's not his story you carry. It's yours.\n\nWith love,\nRonald, Alex, Maria Sophia and Maria Alice Naz\u00e1rio", "es": "En nombre de nosotros, hermanos y hermanas.\n(Alex, Maria Alice, Maria Sophia y Ronald)\n\nCrecer siendo hijo del \"Fen\u00f3meno\" es diferente. De una manera que solo nosotros sabemos.\n\nAlex lleg\u00f3 un poco m\u00e1s tarde a la familia. Y cuando lleg\u00f3, nuestro padre nos meti\u00f3 en una sala de videojuegos y dijo: con\u00f3zcanse, jueguen. Y eso hicimos. Ri\u00e9ndonos de cosas que solo los hermanos entienden.\n\nNo crecimos bajo el mismo techo. Pero nos criamos todos juntos \u2014 existe una complicidad entre nosotros que no necesita explicaci\u00f3n. Solo nosotros sabemos el peso de llevar este nombre, y solo nosotros conocemos sus alegr\u00edas.\n\nVideojuegos, dibujos animados, superpoderes. Estas historias de h\u00e9roes imposibles siempre formaron parte de nuestro universo. No lo sab\u00edamos entonces, pero ese universo se convirti\u00f3 en la semilla de algo mucho m\u00e1s grande. Fue exactamente ah\u00ed, con nuestro padre jugando con los fans en un momento de incertidumbre en todo el planeta, donde naci\u00f3 la Rede Ronaldo. Lo que comenz\u00f3 en la sala de casa se ha convertido en todo lo que est\u00e1n viendo hoy.\n\nY hay algo que tenemos que decir: estamos muy orgullosos de ser los hijos de nuestro padre. Cuando estamos fuera de Brasil y alguien descubre que somos brasile\u00f1os, la gente ya dice \"Ronaldo Naz\u00e1rio\". Y cuando descubren que somos sus hijos, el impacto siempre nos sorprende. El brillo en los ojos de quien lo descubre, el amor que sienten por nuestro padre \u2014 todo eso desborda y a\u00fan nos encuentra. Somos muy felices por eso.\n\nLa abuela (Dona S\u00f4nia) ya dijo lo que siempre supimos. El mayor logro de nuestro padre no estaba en ninguna vitrina. Estaba en lo que nos ense\u00f1\u00f3 sin necesitar decirlo.\n\nQue caer es parte del camino. Que levantarse es una elecci\u00f3n. Y que la superaci\u00f3n no es un don \u2014 es la respuesta de quienes se negaron a quedarse en el suelo.\n\nAs\u00ed que si vas a salir de esta experiencia llevando algo contigo, que sea esto.\n\nNo es su historia la que llevas. Es la tuya.\n\nCon amor,\nRonald, Alex, Maria Sophia y Maria Alice Naz\u00e1rio"}}];
-const AWARDS = [{"id":"bo97","rrIcon":"ico_trophy","icon":"⚽","lq1":"#FDD306","lq2":"#FF4700","year":1997,"cat":{"pt":"Melhor Jogador do Mundo","en":"World's Best Player","es":"Mejor Jugador del Mundo"},"title":{"pt":"Ballon d'Or 1997","en":"Ballon d'Or 1997","es":"Balón de Oro 1997"},"org":"France Football","desc":{"pt":"Bola dourada em metal polido gravada 'Luis Nazario de Lima — RONALDO — 1997'. O primeiro conquistado por um jogador não-europeu desde 1995. Acompanha maleta preta de alumínio original.","en":"Golden ball in polished metal engraved 'Luis Nazario de Lima — RONALDO — 1997'. The first won by a non-European player since 1995. Comes with the original black aluminum case.","es":"Balón dorado en metal pulido grabado 'Luis Nazario de Lima — RONALDO — 1997'. El primero ganado por un jugador no europeo desde 1995. Incluye el estuche original de aluminio negro."},"stats":{"pt":"Barcelona · 47 gols em 49 jogos","en":"Barcelona · 47 goals in 49 games","es":"Barcelona · 47 goles en 49 partidos"},"imgAward":null,"imgRonaldo":null,"photoTrophy":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_00.jpg","photoRonaldo":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_01.jpg","rare":5},{"id":"fifa97","rrIcon":"ico_trophy","icon":"🏆","lq1":"#4A4DFF","lq2":"#2226FF","year":1997,"cat":{"pt":"Melhor Jogador do Mundo","en":"World's Best Player","es":"Mejor Jugador del Mundo"},"title":{"pt":"FIFA World Player of the Year","en":"FIFA World Player of the Year","es":"FIFA World Player of the Year"},"org":"FIFA · Disneyland Paris · 1998","desc":{"pt":"Ronaldo venceu com 480 pontos — o primeiro jogador a conquistar em duas edições consecutivas (1996 e 1997). A bola no topo do troféu é a Adidas Tricolore, bola oficial da Copa de 1998.","en":"Ronaldo won with 480 points — the first player to win in two consecutive editions (1996 and 1997). The ball on top is the Adidas Tricolore, the official ball of the 1998 World Cup.","es":"Ronaldo ganó con 480 puntos — el primer jugador en ganar en dos ediciones consecutivas (1996 y 1997). El balón en la cima es el Adidas Tricolore, balón oficial de la Copa de 1998."},"stats":{"pt":"1ª vez: 1996 · 2ª vez: 1997","en":"1st: 1996 · 2nd: 1997","es":"1ª vez: 1996 · 2ª vez: 1997"},"imgAward":null,"imgRonaldo":null,"photoTrophy":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_02.jpg","photoRonaldo":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_03.jpg","rare":5},{"id":"euro97","rrIcon":"ico_ball","icon":"👟","lq1":"#FDD306","lq2":"#FFB300","year":1997,"cat":{"pt":"Artilheiro Europeu","en":"European Top Scorer","es":"Máximo Goleador Europeo"},"title":{"pt":"Chuteira de Ouro Europeia","en":"European Golden Boot","es":"Bota de Oro Europea"},"org":"European Sports Media · 1ª edição","desc":{"pt":"Escultura em metal dourado espelhado de uma chuteira Adidas Copa Mundial, sobre base em mármore preto. Temporada 1996/97: Ronaldo marcou 34 gols em 37 jogos pelo Barcelona. 1ª edição do prêmio.","en":"A sculpture in mirrored gold metal of an Adidas Copa Mundial boot, on a black marble base. 1996/97 season: Ronaldo scored 34 goals in 37 games for Barcelona. 1st edition of the award.","es":"Escultura en metal dorado espejado de una bota Adidas Copa Mundial, sobre base de mármol negro. Temporada 1996/97: Ronaldo marcó 34 goles en 37 partidos con el Barcelona. 1ª edición."},"stats":{"pt":"Barcelona · 34 gols em 37 jogos","en":"Barcelona · 34 goals in 37 games","es":"Barcelona · 34 goles en 37 partidos"},"imgAward":null,"imgRonaldo":null,"photoTrophy":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_04.jpg","photoRonaldo":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_04.jpg","rare":5},{"id":"bo02","rrIcon":"ico_trophy","icon":"⚽","lq1":"#FDD306","lq2":"#FF4700","year":2002,"cat":{"pt":"Melhor Jogador do Mundo","en":"World's Best Player","es":"Mejor Jugador del Mundo"},"title":{"pt":"Ballon d'Or 2002","en":"Ballon d'Or 2002","es":"Balón de Oro 2002"},"org":"France Football · 12 dez. 2002","desc":{"pt":"Bola dourada sobre base de cristal/pirita bruta. Conquistado após liderar o Brasil ao pentacampeonato com 8 gols. A coleção possui os dois Ballons d'Or de Ronaldo Fenômeno: conjunto extraordinariamente raro.","en":"Golden ball on a raw crystal/pyrite base. Won after leading Brazil to the five-time world championship with 8 goals. The collection holds both of Ronaldo Fenômeno's Ballons d'Or: an extraordinarily rare set.","es":"Balón dorado sobre base de cristal/pirita en bruto. Conquistado tras liderar a Brasil al pentacampeonato con 8 goles. La colección posee los dos Balones de Oro de Ronaldo Fenômeno: conjunto raro."},"stats":{"pt":"Copa 2002 · 8 gols · Artilheiro · Penta","en":"2002 WC · 8 goals · Top Scorer · Champion","es":"Copa 2002 · 8 goles · Artillero · Penta"},"imgAward":null,"imgRonaldo":null,"photoTrophy":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_05.jpg","photoRonaldo":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_06.jpg","rare":5},{"id":"merc","rrIcon":"ico_bolt","icon":"⚡","lq1":"#FDD306","lq2":"#2226FF","year":2002,"cat":{"pt":"Peça Histórica ★★★★★","en":"Historic Item ★★★★★","es":"Pieza Histórica ★★★★★"},"title":{"pt":"Nike Mercurial — Final de Yokohama","en":"Nike Mercurial — Yokohama Final","es":"Nike Mercurial — Final de Yokohama"},"org":"30 jun. 2002 · International Stadium, Yokohama","desc":{"pt":"Chuteiras Nike Mercurial amarelas usadas na final da Copa 2002. Dois gols. Vitória 2 a 0 sobre a Alemanha. Ambas assinadas. A vitrine inclui fragmento de grama do estádio lacrado em acrílico: 'The Grass of June 30, 2002'.","en":"Yellow Nike Mercurial boots worn in the 2002 World Cup final. Two goals. 2-0 victory over Germany. Both signed. The display includes a fragment of stadium grass sealed in acrylic: 'The Grass of June 30, 2002'.","es":"Botas Nike Mercurial amarillas usadas en la final de la Copa 2002. Dos goles. Victoria 2-0 sobre Alemania. Ambas firmadas. La vitrina incluye un fragmento del césped sellado en acrílico: 'The Grass of June 30, 2002'."},"stats":{"pt":"2 gols · Final Copa 2002 · vs Alemanha","en":"2 goals · 2002 WC Final · vs Germany","es":"2 goles · Final Copa 2002 · vs Alemania"},"imgAward":null,"imgRonaldo":null,"rare":5},{"id":"penta","rrIcon":"ico_shield","icon":"🥇","lq1":"#FDD306","lq2":"#FFB300","year":2002,"cat":{"pt":"Medalha de Campeão","en":"Champion's Medal","es":"Medalla de Campeón"},"title":{"pt":"Medalha de Ouro — Copa 2002","en":"Gold Medal — 2002 World Cup","es":"Medalla de Oro — Copa 2002"},"org":"FIFA · Japão / Coreia do Sul","desc":{"pt":"A medalha de ouro oficial da FIFA — o pentacampeonato do Brasil. A ressurreição de Ronaldo. Dois joelhos operados três vezes. Dois gols na final. Uma medalha que vale uma vida inteira.","en":"The official FIFA gold medal — Brazil's five-time world championship. Ronaldo's resurrection. Two knees operated three times. Two goals in the final. A medal worth an entire lifetime.","es":"La medalla de oro oficial de la FIFA — el pentacampeonato de Brasil. La resurrección de Ronaldo. Dos rodillas operadas tres veces. Dos goles en la final. Una medalla que vale toda una vida."},"stats":{"pt":"Penta · Japão/Coreia 2002","en":"Champions · Japan/Korea 2002","es":"Penta · Japón/Corea 2002"},"imgAward":null,"imgRonaldo":null,"photoTrophy":"https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_07.jpg","photoRonaldo":null,"rare":5},{"id":"bronze06","rrIcon":"ico_bolt","icon":"🥉","lq1":"#FF8A3D","lq2":"#FF4700","year":2006,"cat":{"pt":"Artilheiro Histórico das Copas","en":"All-Time WC Top Scorer","es":"Máximo Goleador de Copas"},"title":{"pt":"Chuteira de Bronze — Copa 2006","en":"Bronze Boot — 2006 World Cup","es":"Bota de Bronce — Copa 2006"},"org":"FIFA · Alemanha 2006","desc":{"pt":"Na Copa de 2006, Ronaldo superou Gerd Müller: 15 gols históricos em Copas. Um recorde que durou décadas. A Chuteira de Bronze é o prêmio físico deste momento único.","en":"At the 2006 World Cup, Ronaldo surpassed Gerd Müller: 15 all-time World Cup goals. A record that stood for decades. The Bronze Boot is the physical award of this unique moment.","es":"En la Copa de 2006, Ronaldo superó a Gerd Müller: 15 goles históricos en Copas. Un récord que duró décadas. La Bota de Bronce es el premio físico de este momento único."},"stats":{"pt":"15 gols em Copas · Recorde histórico","en":"15 WC goals · All-time record","es":"15 goles en Copas · Récord histórico"},"imgAward":null,"imgRonaldo":null,"rare":4},{"id":"globe","rrIcon":"ico_trophy","icon":"🌐","lq1":"#4A4DFF","lq2":"#2226FF","year":2018,"cat":{"pt":"Prêmio de Legado","en":"Legacy Award","es":"Premio al Legado"},"title":{"pt":"Globe Soccer Awards","en":"Globe Soccer Awards","es":"Globe Soccer Awards"},"org":"Dubai · 2018","desc":{"pt":"O Globe Soccer Award reconhece os maiores nomes do futebol mundial. Entregue em Dubai, celebra a trajetória de Ronaldo Fenômeno como um dos maiores jogadores de todos os tempos.","en":"The Globe Soccer Award recognizes the greatest names in world football. Presented in Dubai, it celebrates Ronaldo Fenômeno's career as one of the all-time greats.","es":"El Globe Soccer Award reconoce a los más grandes del fútbol mundial. Entregado en Dubai, celebra la trayectoria de Ronaldo Fenômeno como uno de los mejores de todos los tiempos."},"stats":{"pt":"Dubai 2018 · Legado histórico","en":"Dubai 2018 · Historical legacy","es":"Dubai 2018 · Legado histórico"},"imgAward":null,"imgRonaldo":null,"rare":4}];
-const RR_SPRITE = "https://brunodeluca-alt.github.io/fenomeno50/imgs/extra_08.jpg";
-const ICONS_POS = {"trophy":[631,400],"ball":[1051,400],"star":[210,675],"shield":[911,950],"bolt":[1051,950],"home":[97,400],"mic":[1051,675],"live":[631,675]};
-
-
-
-const HERO = {"players": [{"x": 0.085, "club": {"pt": "Cruzeiro", "en": "Cruzeiro", "es": "Cruzeiro"}, "yr": "1993"}, {"x": 0.205, "club": {"pt": "PSV Eindhoven", "en": "PSV Eindhoven", "es": "PSV Eindhoven"}, "yr": "1994"}, {"x": 0.315, "club": {"pt": "Barcelona", "en": "Barcelona", "es": "Barcelona"}, "yr": "1996"}, {"x": 0.42, "club": {"pt": "Inter de Mil\u00e3o", "en": "Inter Milan", "es": "Inter de Mil\u00e1n"}, "yr": "1997"}, {"x": 0.545, "club": {"pt": "Sele\u00e7\u00e3o Brasileira", "en": "Brazil", "es": "Selecci\u00f3n"}, "yr": "2002"}, {"x": 0.67, "club": {"pt": "Real Madrid", "en": "Real Madrid", "es": "Real Madrid"}, "yr": "2003"}, {"x": 0.765, "club": {"pt": "AC Milan", "en": "AC Milan", "es": "AC Milan"}, "yr": "2007"}, {"x": 0.875, "club": {"pt": "Corinthians", "en": "Corinthians", "es": "Corinthians"}, "yr": "2009"}], "ratio": 2.331578947368421};
-const ACERVO = {"items":[{"id":1,"ano":1990,"ato":"ato1","item":"Medalha Artilheiro — Campeonato Metropolitano","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":2,"ano":1991,"ato":"ato1","item":"Medalha Artilheiro — Copa C.B.I.A.","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":3,"ano":1991,"ato":"ato1","item":"Medalha 2° Artilheiro Infantil — São Cristóvão","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":4,"ano":1991,"ato":"ato1","item":"Medalha Artilheiro — Copa Funabem","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":5,"ano":1993,"ato":"ato1","item":"Santinho autografado pelo Zico","temos":true,"ok":true,"col":"R","carta":"Seu Nélio","imp":true,"nota":null},{"id":6,"ano":1993,"ato":"ato1","item":"Troféu 'Fato do Ano 93' — Cruzeiro","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"ÚNICO NO MUNDO"},{"id":7,"ano":1993,"ato":"ato1","item":"Medalha Recopa Sudamericana — Cruzeiro","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":82,"ano":null,"ato":"ato1","item":"Medalha 'Club do Gusi' — Artilheiro (infância)","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":"Torneio a identificar"},{"id":8,"ano":1994,"ato":"ato2","item":"Medalha Ouro Copa do Mundo 1994 — Tetra","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":9,"ano":1994,"ato":"ato2","item":"Credencial Oficial Copa 1994","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":10,"ano":1994,"ato":"ato2","item":"Kit Nike PSV + card ídolo Zico","temos":true,"ok":true,"col":"R","carta":"Zico","imp":true,"nota":null},{"id":11,"ano":1994,"ato":"ato2","item":"Card PSV Eindhoven 1994–95 autografado","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":12,"ano":1995,"ato":"ato2","item":"Medalha Copa América 1995 — Prata","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":13,"ano":1995,"ato":"ato2","item":"Card PSV Eindhoven 1995–96","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":14,"ano":1996,"ato":"ato2","item":"Camisa Barcelona Titular 96–97 Kappa — Blaugrana","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"⚠ Catalogada como Away — é TITULAR. Conexão: ids 17/19/20"},{"id":15,"ano":1996,"ato":"ato2","item":"Medalha Recopa Europeia — Barcelona","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":16,"ano":1996,"ato":"ato2","item":"FIFA World Player of the Year 1996","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":17,"ano":1997,"ato":"ato2","item":"Chuteira de Ouro Europeia Adidas-ESM 1996–97","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"1ª edição. Confirmar inscrição base"},{"id":18,"ano":1997,"ato":"ato2","item":"Réplica UEFA Cup Winners Cup — Barcelona","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":19,"ano":1997,"ato":"ato2","item":"Ballon d'Or 1997","temos":true,"ok":true,"col":"R","carta":"Zico","imp":true,"nota":"Maleta alumínio original"},{"id":20,"ano":1997,"ato":"ato2","item":"FIFA World Player of the Year 1997","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":21,"ano":1997,"ato":"ato2","item":"Medalha Copa América 1997 — Ouro","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":22,"ano":1997,"ato":"ato2","item":"Medalha Copa das Confederações 1997","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":23,"ano":1997,"ato":"ato2","item":"Camisa Inter de Milão emoldurada","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":24,"ano":1997,"ato":"ato2","item":"Medalha UEFA Cup — Inter de Milão","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":25,"ano":1998,"ato":"ato2","item":"Medalha Prata Copa 1998 — Paris","temos":true,"ok":true,"col":"R","carta":"Zico","imp":true,"nota":null},{"id":26,"ano":1999,"ato":"ato2","item":"Medalha Copa América 1999 — Ouro","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":27,"ano":2000,"ato":"ato2","item":"Medalha Coppa Italia 1999–2000","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":52,"ano":1994,"ato":"ato2","item":"Troféu Pres Service — Artilheiro Mineiro 1994","temos":true,"ok":true,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":53,"ano":1994,"ato":"ato2","item":"Atleta do Centenário — Sec. Municipal Esportes","temos":true,"ok":false,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":54,"ano":1995,"ato":"ato2","item":"Nacht der Vedetten — Eindhoven 1995","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":55,"ano":1996,"ato":"ato2","item":"Homenagem Centro de Futebol — Lisboa 1996","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":56,"ano":1996,"ato":"ato2","item":"Club Barça Jove Sport — Los Mejores del 96","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":57,"ano":1996,"ato":"ato2","item":"La Cadena COPE — Mejor Jugador Extranjero 96/97","temos":true,"ok":true,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":58,"ano":1997,"ato":"ato2","item":"Brasil World Tour Japan — Nike Japan 1997","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":59,"ano":1997,"ato":"ato2","item":"千里明杯 97 — Melhor Atleta Mundo (China)","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":60,"ano":1998,"ato":"ato2","item":"UEFA Best Forward 1997/98 — Monaco","temos":true,"ok":false,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":61,"ano":1998,"ato":"ato2","item":"UEFA Most Valuable Player 1997/98 — Monaco","temos":true,"ok":false,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":62,"ano":1998,"ato":"ato2","item":"Tuttosport — Placa Comemorativa Edição Nº 1","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":63,"ano":1998,"ato":"ato2","item":"Réplica Coupe UEFA — Inter · Paris 1998","temos":true,"ok":false,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":64,"ano":1998,"ato":"ato2","item":"Hall of Fame del Calcio Italiano — FIGC","temos":true,"ok":false,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":65,"ano":1998,"ato":"ato2","item":"Hong Kong City of Life — Cristal comemorativo","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":78,"ano":1994,"ato":"ato2","item":"Nike Premier Preta — 1ª chuteira Nike (PSV)","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":80,"ano":1999,"ato":"ato2","item":"Chuteira Nike Mercurial — época 1ª lesão Inter","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"Confirmar par com id:81"},{"id":28,"ano":2002,"ato":"ato3","item":"Chuteiras Nike Mercurial Amarelas — Final Yokohama","temos":true,"ok":true,"col":"R","carta":"Felipão","imp":true,"nota":"PEÇA ÂNCORA. Grama original + ingresso 2006"},{"id":29,"ano":2002,"ato":"ato3","item":"Medalha Ouro Copa 2002 — Penta","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":30,"ano":2002,"ato":"ato3","item":"Réplica FIFA Copa 2002 — exclusiva jogadores","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":31,"ano":2002,"ato":"ato3","item":"FIFA World Player 2002 — nome RONALDO gravado","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":32,"ano":2002,"ato":"ato3","item":"Ballon d'Or 2002","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"Maleta alumínio original. 2 Ballons d'Or juntos = raríssimo"},{"id":33,"ano":2002,"ato":"ato3","item":"Camisa Seleção Brasileira Away Azul Copa 2002","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":34,"ano":2002,"ato":"ato3","item":"Chuteira de Ouro Copa 2002 — artilheiro 8 gols","temos":true,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":"RECEBIDO de Ronald. Placa: FIFA World Cup Korea/Japan 2002 · Ronaldo. Base mármore preto."},{"id":51,"ano":2002,"ato":"ato3","item":"Chuteira Adidas de Ouro — acervo","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"Confirmar: Copa 2002 ou outro?"},{"id":66,"ano":2002,"ato":"ato3","item":"IstoÉ — Brasileiro do Ano 2002","temos":true,"ok":false,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":67,"ano":2002,"ato":"ato3","item":"Prêmio Brasil Olímpico 2002 — Hors Concours","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":79,"ano":2002,"ato":"ato3","item":"Camisa Seleção Titular Amarela Final 2002 — autografada","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"Distinto do id:33 (away azul)"},{"id":81,"ano":2002,"ato":"ato3","item":"Chuteira Nike Mercurial Preta — Copa 2002 autografada","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"Confirmar par com id:80"},{"id":35,"ano":2002,"ato":"ato4","item":"Medalha Copa Intercontinental FIFA 2002","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":36,"ano":2003,"ato":"ato4","item":"Man of the Match — HK vs Real Madrid 2003","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":37,"ano":2003,"ato":"ato4","item":"Supercopa de España 2003 — Real Madrid","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":38,"ano":2003,"ato":"ato4","item":"Trofeo EFE — Melhor Ibero-americano 2002–03","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":null},{"id":39,"ano":2003,"ato":"ato4","item":"Camisas Real Madrid autografadas (cinza + preta)","temos":true,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":null},{"id":40,"ano":2003,"ato":"ato4","item":"Nike R9 Laranja/Preto autografada","temos":true,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":null},{"id":41,"ano":2003,"ato":"ato4","item":"Nike R9 Dourada autografada","temos":true,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":null},{"id":42,"ano":2003,"ato":"ato4","item":"Nike Mercurial Prata/Azul/Verde autografada","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":43,"ano":2006,"ato":"ato4","item":"Chuteira de Bronze Copa 2006 — recorde 15 gols","temos":false,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":"Em negociação"},{"id":44,"ano":2009,"ato":"ato4","item":"Faixa Campeão Paulistão 2009 — Corinthians invicto","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":45,"ano":2009,"ato":"ato4","item":"Nike Tiempo Legend R9 Preto/Amarelo — filhos bordados","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"PAR ÚNICO — Ronald + Maria Sophia"},{"id":46,"ano":2010,"ato":"ato4","item":"Nike Tiempo Legend III Roxo/Laranja — Corinthians","temos":true,"ok":true,"col":"R","carta":null,"imp":true,"nota":"PAR ÚNICO — Ronald + Maria Sophia"},{"id":47,"ano":2009,"ato":"ato4","item":"Conjunto Copa do Brasil emoldurado — Corinthians","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":48,"ano":2018,"ato":"ato4","item":"Globe Soccer Awards — Globo de Ouro","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":49,"ano":2025,"ato":"ato4","item":"Medalha Final Draw Copa 2026 — Washington D.C.","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":50,"ano":null,"ato":"ato4","item":"Camiseta Seleção Brasileira autografada por Pelé","temos":true,"ok":true,"col":"R","carta":"Beckham","imp":true,"nota":null},{"id":68,"ano":2003,"ato":"ato4","item":"Trofeo Pichichi 2003/04 — Real Madrid (24 gols)","temos":true,"ok":false,"col":"Rn","carta":null,"imp":true,"nota":null},{"id":69,"ano":2001,"ato":"ato4","item":"Grand Prix Open Monza — 2nd Team (golfe)","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":70,"ano":2001,"ato":"ato4","item":"Grand Prix Open Monte-Carlo — 1st Putting (golfe)","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":71,"ano":2010,"ato":"ato4","item":"Prêmio Craque Brasileirão 2010 — CBF","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":72,"ano":null,"ato":"ato4","item":"Bola FIFA Approved — Autógrafos Múltiplos","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":"Identificar autógrafos"},{"id":73,"ano":null,"ato":"ato4","item":"Réplica FC Barcelona Campió de Lliga 1991-92","temos":true,"ok":false,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":74,"ano":null,"ato":"ato4","item":"Troféu da Concha — espanhol (fã-clube/gala)","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":"NÃO é da infância"},{"id":75,"ano":null,"ato":"ato4","item":"Independiente del Valle — Placa","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null},{"id":76,"ano":2012,"ato":"ato5","item":"Medida Certa — TV Globo / Fantástico 2012","temos":true,"ok":true,"col":"R","carta":null,"imp":false,"nota":null},{"id":77,"ano":2018,"ato":"ato5","item":"BACC Global Goodwill Ambassador — Tiffany & Co.","temos":true,"ok":true,"col":"Rn","carta":null,"imp":false,"nota":null}],"featuredByPanel":{"p02":[5,6,7,1,3],"p03":[8,10,14,16,22,23,24,25,30,31],"p05":[38,39,40,44,45,46],"p06":[52,53,55],"p07":[62,66]},"atoToPanels":{"ato1":["p02"],"ato2":["p03","p04"],"ato3":["p05"],"ato4":["p06"],"ato5":["p07"]}};
-
-
-/* ═══════════════════════════════════════════════════════════
-   I18N
-   ═══════════════════════════════════════════════════════════ */
-let LANG = 'pt';
-const T = {
-  pt:{home_eyebrow:"DO BRASIL PARA O MUNDO",hero_sub:"Ronaldo Luís Nazário de Lima · 22 set 1976",
-     scroll:"DESLIZE PARA EXPLORAR",
-     stat1:"Bolas de Ouro",stat2:"Gols em Copas",stat3:"Mundiais",
-     jrn_kick:"A SAGA EM 8 CAPÍTULOS",jrn_title:"A JORNADA",jrn_sub:"Cada ato narrado por quem viveu ao lado dele",
-     home_jrn_kick:"A HISTÓRIA",home_jrn_title:"A JORNADA",home_jrn_sub:"De Bento Ribeiro à lenda. Toque para mergulhar.",
-     home_aw_kick:"AS CONQUISTAS",home_aw_title:"PRÊMIOS",home_aw_sub:"Os troféus que contam uma carreira única",
-     aw_kick:"O ACERVO",aw_title:"PRÊMIOS",aw_sub:"Toque em cada peça para conhecer sua história",
-     vis_kick:"O ESPAÇO",vis_title:"A VISITA",
-     loc_h:"Wynwood Marketplace",loc_addr:"2250 NW 2nd Ave · Miami, FL 33127",loc_when:"11 JUN — 19 JUL 2026",
-     read:"Ler a carta",open:"Abrir capítulo",prev:"Anterior",next:"Próximo",
-     zoomhint:"Toque 2× ou use os botões",
-     vis_cap_h:"O ESPAÇO EXPERIÊNCIA",vis_cap_p:"5.000m² no coração de Wynwood, durante a Copa do Mundo 2026",
-     vis_loc:"Local",vis_date:"Período",vis_date_v:"11 de junho a 19 de julho de 2026",
-     vis_ctx:"Contexto",vis_ctx_v:"Copa do Mundo 2026 · EUA, Canadá e México",
-     vis_part:"PARCEIROS DA EXPERIÊNCIA",narrated:"Narrado por",nav_home:"INÍCIO",nav_jrn:"A JORNADA",nav_aw:"PRÊMIOS",nav_vis:"VISITA"},
-  en:{home_eyebrow:"FROM BRAZIL TO THE WORLD",hero_sub:"Ronaldo Luís Nazário de Lima · Sep 22, 1976",
-     scroll:"SWIPE TO EXPLORE",
-     stat1:"Ballon d'Or",stat2:"World Cup Goals",stat3:"World Cups",
-     jrn_kick:"THE SAGA IN 8 CHAPTERS",jrn_title:"THE JOURNEY",jrn_sub:"Each act told by those who lived it beside him",
-     home_jrn_kick:"THE STORY",home_jrn_title:"THE JOURNEY",home_jrn_sub:"From Bento Ribeiro to legend. Tap to dive in.",
-     home_aw_kick:"THE ACHIEVEMENTS",home_aw_title:"AWARDS",home_aw_sub:"The trophies that tell a unique career",
-     aw_kick:"THE COLLECTION",aw_title:"AWARDS",aw_sub:"Tap each piece to discover its story",
-     vis_kick:"THE SPACE",vis_title:"THE VISIT",
-     loc_h:"Wynwood Marketplace",loc_addr:"2250 NW 2nd Ave · Miami, FL 33127",loc_when:"JUN 11 — JUL 19, 2026",
-     read:"Read the letter",open:"Open chapter",prev:"Previous",next:"Next",
-     zoomhint:"Double-tap or use buttons",
-     vis_cap_h:"THE EXPERIENCE SPACE",vis_cap_p:"5,000m² in the heart of Wynwood, during the 2026 World Cup",
-     vis_loc:"Location",vis_date:"Dates",vis_date_v:"June 11 to July 19, 2026",
-     vis_ctx:"Context",vis_ctx_v:"2026 World Cup · USA, Canada & Mexico",
-     vis_part:"EXPERIENCE PARTNERS",narrated:"Narrated by",nav_home:"HOME",nav_jrn:"THE JOURNEY",nav_aw:"AWARDS",nav_vis:"VISIT"},
-  es:{home_eyebrow:"DE BRASIL PARA EL MUNDO",hero_sub:"Ronaldo Luís Nazário de Lima · 22 sep 1976",
-     scroll:"DESLIZA PARA EXPLORAR",
-     stat1:"Balones de Oro",stat2:"Goles en Mundiales",stat3:"Mundiales",
-     jrn_kick:"LA SAGA EN 8 CAPÍTULOS",jrn_title:"LA JORNADA",jrn_sub:"Cada acto narrado por quien lo vivió a su lado",
-     home_jrn_kick:"LA HISTORIA",home_jrn_title:"LA JORNADA",home_jrn_sub:"De Bento Ribeiro a la leyenda. Toca para sumergirte.",
-     home_aw_kick:"LAS CONQUISTAS",home_aw_title:"PREMIOS",home_aw_sub:"Los trofeos que cuentan una carrera única",
-     aw_kick:"LA COLECCIÓN",aw_title:"PREMIOS",aw_sub:"Toca cada pieza para conocer su historia",
-     vis_kick:"EL ESPACIO",vis_title:"LA VISITA",
-     loc_h:"Wynwood Marketplace",loc_addr:"2250 NW 2nd Ave · Miami, FL 33127",loc_when:"11 JUN — 19 JUL 2026",
-     read:"Leer la carta",open:"Abrir capítulo",prev:"Anterior",next:"Siguiente",
-     zoomhint:"Toca 2× o usa los botones",
-     vis_cap_h:"EL ESPACIO EXPERIENCIA",vis_cap_p:"5.000m² en el corazón de Wynwood, durante el Mundial 2026",
-     vis_loc:"Lugar",vis_date:"Período",vis_date_v:"11 de junio al 19 de julio de 2026",
-     vis_ctx:"Contexto",vis_ctx_v:"Mundial 2026 · EE.UU., Canadá y México",
-     vis_part:"SOCIOS DE LA EXPERIENCIA",narrated:"Narrado por",nav_home:"INICIO",nav_jrn:"LA JORNADA",nav_aw:"PREMIOS",nav_vis:"VISITA"}
+/* ── I18N labels ── */
+const LABELS = {
+  pt:{expo:'EXPOSIÇÃO',back:'Percurso',wall:'TEXTO DE PAREDE',prev:'Anterior',next:'Próximo',place:'Wynwood · Miami · 2026',dates:'11 jun — 19 jul 2026'},
+  en:{expo:'EXHIBITION',back:'Back',wall:'WALL TEXT',prev:'Previous',next:'Next',place:'Wynwood · Miami · 2026',dates:'Jun 11 — Jul 19 2026'},
+  es:{expo:'EXPOSICIÓN',back:'Volver',wall:'TEXTO DE PARED',prev:'Anterior',next:'Siguiente',place:'Wynwood · Miami · 2026',dates:'11 jun — 19 jul 2026'}
 };
-const t = k => (T[LANG][k]!==undefined?T[LANG][k]:k);
-const L = obj => obj ? (obj[LANG]||obj.pt||'') : '';
 
-/* helper: split letter first line */
-function letterHTML(txt){
-  const lines = txt.split('\n');
-  let first = lines[0]||'';
-  let rest = lines.slice(1).join('\n').trim();
-  return `<span class="firstline">${first}</span>${rest}`;
-}
-function initials(name){
-  if(!name) return '★';
-  const p = name.replace(/^(Seu|Dona|Os)\s+/i,'').split(' ');
-  return (p[0][0]||'') + (p[1]?p[1][0]:'');
-}
+let LANG = 'pt';
+let currentIdx = 0;
 
-/* ═══════════════════════════════════════════════════════════
-   RENDER: HOME
-   ═══════════════════════════════════════════════════════════ */
-function renderHome(){
-  const intro = PANELS.find(p=>p.id==='p00');
-  const chapters = PANELS.filter(p=>p.id!=='p00'&&p.id!=='p08');
-  const featuredAwards = AWARDS.filter(a=>a.photoTrophy).slice(0,5);
-  const introText = L(intro.text);
-  const firstPara = introText.split('\n\n').slice(0,2).join(' ').replace(/—.*$/,'').trim();
+function L(obj){ return obj[LANG] || obj.pt || ''; }
 
-  let railHTML = chapters.map((p,i)=>`
-    <div class="rcard" onclick="openChapter('${p.id}')">
-      <img src="${panelThumb(p.id)||panelImg(p.id)}" alt="">
-      <div class="ov"></div>
-      <div class="idx">${i+1}</div>
-      <div class="meta">
-        <div class="ac">${L(p.ato)}</div>
-        <h3>${L(p.title)}</h3>
-        ${p.narrator&&p.narrator.name?`<div class="nm">${t('narrated')} ${p.narrator.name}</div>`:''}
-      </div>
-    </div>`).join('');
-
-  let awHTML = featuredAwards.map(a=>`
-    <div class="aw-mini" onclick="openAward('${a.id}')">
-      <img src="${a.photoRonaldo||a.photoTrophy}" alt="">
-      <div class="ov"></div>
-      <div class="lb"><div class="yr">${a.year}</div><b>${L(a.title)}</b></div>
-    </div>`).join('');
-
-  document.getElementById('s-home').innerHTML = `
-    <div class="hero">
-      <div class="hero-pan"><img src="${heroImg()}" id="heroStrip" alt=""></div>
-      <div class="hero-era" id="heroEra"><span class="yr"></span><span class="club"></span></div>
-      <div class="hero-inner fade-up">
-        <span class="eyebrow">★ ${t('home_eyebrow')}</span>
-        <h1>FENÔ<br>MENO <span class="y">50</span></h1>
-        <div class="sub">${t('hero_sub')}</div>
-        <div class="hero-dots" id="heroDots">${HERO.players.map((_,i)=>`<span class="d${i===0?' on':''}"></span>`).join('')}</div>
-      </div>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><b>3×</b><span>${t('stat1')}</span></div>
-      <div class="stat"><b>15</b><span>${t('stat2')}</span></div>
-      <div class="stat"><b>2×</b><span>${t('stat3')}</span></div>
-    </div>
-
-    <div class="quote-card">
-      <div class="qm">"</div>
-      <p>${firstPara}</p>
-      <div class="by"><div class="av">MU</div><div><b>Marcos Uchôa</b><span>${L(intro.narrator.role)}</span></div></div>
-    </div>
-
-    <div class="sec">
-      <div class="kick">${t('home_jrn_kick')}</div>
-      <h2>${t('home_jrn_title')}</h2>
-      <p>${t('home_jrn_sub')}</p>
-    </div>
-    <div class="rail">${railHTML}</div>
-
-    <div class="sec">
-      <div class="kick">${t('home_aw_kick')}</div>
-      <h2>${t('home_aw_title')}</h2>
-      <p>${t('home_aw_sub')}</p>
-    </div>
-    <div class="aw-strip">${awHTML}</div>
-
-    <div class="loc-card">
-      <div class="stripes"></div>
-      <div class="inner">
-        <div class="pin">📍</div>
-        <h3>${t('loc_h')}</h3>
-        <div class="addr">${t('loc_addr')}</div>
-        <div class="when">${t('loc_when')}</div>
-      </div>
-    </div>
-  `;
+function setLang(l){
+  LANG = l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.textContent===l.toUpperCase()));
+  renderList();
+  // Update labels
+  const lb = LABELS[l];
+  document.getElementById('lbl-expo').textContent = lb.expo;
+  document.getElementById('lbl-back').textContent = lb.back;
+  document.getElementById('lbl-wall').textContent = lb.wall;
+  document.getElementById('lbl-prev').textContent = lb.prev;
+  document.getElementById('lbl-next').textContent = lb.next;
+  document.getElementById('lbl-place').textContent = lb.place;
+  document.getElementById('lbl-dates').textContent = lb.dates;
+  // If in detail view, re-render detail
+  if(document.getElementById('view-detail').style.display !== 'none'){
+    showDetail(currentIdx);
+  }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RENDER: JOURNEY
-   ═══════════════════════════════════════════════════════════ */
-function renderJourney(){
-  let html = `
-    <div class="jrn-head fade-up">
-      <div class="kick">${t('jrn_kick')}</div>
-      <h1>${t('jrn_title')}</h1>
-      <p>${t('jrn_sub')}</p>
-    </div>
-    <div class="jrn-list">`;
-  PANELS.forEach((p,i)=>{
-    html += `
-      <div class="chap" onclick="openChapter('${p.id}')">
-        <div class="node">${i===0?'0':(i)}</div>
-        <div class="body">
-          <img src="${panelThumb(p.id)||panelImg(p.id)}" alt="">
-          <div class="ov"></div>
-          <div class="ct">
-            <div class="ac">${L(p.ato)}</div>
-            <h3>${L(p.title)}</h3>
-            ${p.narrator&&p.narrator.name?`<div class="nm">${p.narrator.name}</div>`:''}
-          </div>
-          <div class="go">${t('open')} →</div>
+function renderList(){
+  const container = document.getElementById('cards-container');
+  container.innerHTML = CHAPTERS.map((ch,i) => `
+    <div class="card" onclick="showDetail(${i})">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${ch.img}" alt="${L(ch.title)}" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-tag">
+          <span class="card-ato">${L(ch.tag)}</span>
+          ${ch.years ? `<span class="card-years">${ch.years}</span>` : ''}
         </div>
-      </div>`;
-  });
-  html += `</div>`;
-  document.getElementById('s-journey').innerHTML = html;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   RENDER: AWARDS
-   ═══════════════════════════════════════════════════════════ */
-function renderAwards(){
-  let tiles = AWARDS.map(a=>{
-    const photo = a.photoRonaldo || a.photoTrophy;
-    const stars = '★'.repeat(a.rare||0);
-    return `
-    <div class="aw-tile" onclick="openAward('${a.id}')">
-      ${photo
-        ? `<img src="${photo}" alt="">`
-        : `<div class="ph-fallback"><div class="ic" data-rr="${a.rrIcon}"></div></div>`}
-      <div class="ov"></div>
-      ${a.rare?`<div class="star">${stars}</div>`:''}
-      <div class="lb">
-        <div class="yr">${a.year}</div>
-        <b>${L(a.title)}</b>
-        <div class="org">${a.org||''}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('s-awards').innerHTML = `
-    <div class="aw-head fade-up">
-      <div class="kick">${t('aw_kick')}</div>
-      <h1>${t('aw_title')}</h1>
-      <p>${t('aw_sub')}</p>
-    </div>
-    <div class="aw-grid">${tiles}</div>
-  `;
-  setTimeout(applyRRIcons,60);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   RENDER: VISIT
-   ═══════════════════════════════════════════════════════════ */
-function renderVisit(){
-  const intro = PANELS.find(p=>p.id==='p00');
-  document.getElementById('s-visit').innerHTML = `
-    <div class="vis-head fade-up">
-      <div class="kick">${t('vis_kick')}</div>
-      <h1>${t('vis_title')}</h1>
-    </div>
-    <div class="vis-hero">
-      <img src="${intro.img}" alt="">
-      <div class="ov"></div>
-      <div class="cap"><h3>${t('vis_cap_h')}</h3><p>${t('vis_cap_p')}</p></div>
-    </div>
-    <div class="vis-info">
-      <div class="vis-row"><div class="ic">📍</div><div class="tx"><b>${t('vis_loc')}</b><span>Wynwood Marketplace<br>2250 NW 2nd Ave · Miami, FL 33127</span></div></div>
-      <div class="vis-row"><div class="ic">📅</div><div class="tx"><b>${t('vis_date')}</b><span>${t('vis_date_v')}</span></div></div>
-      <div class="vis-row"><div class="ic">🏆</div><div class="tx"><b>${t('vis_ctx')}</b><span>${t('vis_ctx_v')}</span></div></div>
-    </div>
-    <div class="partners">
-      <div class="lbl">${t('vis_part')}</div>
-      <div class="logos">
-        ${['Disney+','ESPN','Kwai','EA Sports','Meta','Warner Music','Inflr'].map(p=>`<span class="chip">${p}</span>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DEEP DIVE: CHAPTER
-   ═══════════════════════════════════════════════════════════ */
-let currentChapter = null;
-function openChapter(id){
-  const p = PANELS.find(x=>x.id===id);
-  if(!p) return;
-  currentChapter = id;
-  const order = PANELS.map(x=>x.id);
-  const idx = order.indexOf(id);
-  const prev = idx>0?PANELS[idx-1]:null;
-  const next = idx<PANELS.length-1?PANELS[idx+1]:null;
-
-  let tlHTML = '';
-  if(p.timeline && p.timeline.length){
-    tlHTML = `<div class="tl">` + p.timeline.map(e=>`
-      <div class="tl-item"><div class="dot"></div>
-        <div class="ti"><b>${e.yr}</b><span>${e[LANG]||e.pt}</span></div></div>`).join('') + `</div>`;
-  }
-
-  let narrHTML = '';
-  if(p.narrator && p.narrator.name){
-    narrHTML = `<div class="narr">
-      <div class="av">${initials(p.narrator.name)}</div>
-      <div class="nt"><div class="lbl">${t('narrated')}</div><b>${p.narrator.name}</b><span>${L(p.narrator.role)}</span></div>
-    </div>`;
-  }
-
-  document.getElementById('ovScroll').innerHTML = `
-    <div class="ov-hero">
-      <img src="${panelImg(p.id)}" alt="" onclick="openZoom('${p.id}')">
-      <div class="grad"></div>
-      <div class="ov-zoom-hint">⤢ ${t('zoomhint')}</div>
-      <div class="htext">
-        <span class="ac">${L(p.ato)}</span>
-        <h1>${L(p.title)}</h1>
-      </div>
-    </div>
-    <div class="ov-body">
-      ${narrHTML}
-      ${tlHTML}
-      <div class="letter">${letterHTML(L(p.text))}</div>
-      <div class="chap-nav">
-        <button ${prev?'':'disabled'} onclick="openChapter('${prev?prev.id:''}')">
-          <div class="dir">← ${t('prev')}</div><div class="nm">${prev?L(prev.title):''}</div>
-        </button>
-        <button class="next" ${next?'':'disabled'} onclick="openChapter('${next?next.id:''}')">
-          <div class="dir">${t('next')} →</div><div class="nm">${next?L(next.title):''}</div>
-        </button>
-      </div>
-    </div>
-    ${(()=>{
-      // PEÇAS DESTA FASE: find items related to this panel's ato
-      const atoMap=ACERVO.atoToPanels;
-      const ato=Object.entries(atoMap).find(([a,ps])=>ps.includes(id))?.[0];
-      if(!ato) return '';
-      const featured=ACERVO.featuredByPanel[id]||[];
-      let items=ACERVO.items.filter(i=>i.ato===ato);
-      // Sort: featured first
-      items.sort((a,b)=>{
-        const af=featured.indexOf(a.id),bf=featured.indexOf(b.id);
-        if(af!==-1&&bf===-1) return -1;
-        if(af===-1&&bf!==-1) return 1;
-        if(af!==-1&&bf!==-1) return af-bf;
-        return a.id-b.id;
-      });
-      if(!items.length) return '';
-      const colors={'ato1':'#3B82F6','ato2':'#22C55E','ato3':'#F59E0B','ato4':'#A855F7','ato5':'#EC4899'};
-      const clr=colors[ato]||'var(--gold)';
-      return `<div style="padding:24px 20px 8px;border-top:1px solid rgba(255,255,255,.07);margin-top:16px">
-        <p class="eyebrow" style="color:${clr};margin-bottom:10px">📦 PEÇAS DESTA FASE</p>
-        ${items.slice(0,12).map(it=>`
-        <div onclick="go('acervo')" style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer">
-          <span style="font-size:11px;color:rgba(255,255,255,.25);min-width:28px;padding-top:1px">${String(it.id).padStart(3,'0')}</span>
-          <div style="flex:1">
-            <div style="font-size:12px;font-weight:600;line-height:1.3">${it.item}</div>
-            <div style="display:flex;gap:5px;margin-top:3px;flex-wrap:wrap">
-              ${it.ano?`<span style="font-size:10px;color:rgba(255,255,255,.35)">${it.ano}</span>`:''}
-              <span style="font-size:9px;padding:1px 7px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)">${it.col==='R'?'Ronaldo':'Ronald'}</span>
-              ${it.temos?`<span style="font-size:9px;padding:1px 7px;border-radius:8px;background:rgba(0,200,80,.15);color:#4eff8a">✓</span>`:`<span style="font-size:9px;padding:1px 7px;border-radius:8px;background:rgba(255,60,60,.15);color:#ff7a7a">✗</span>`}
-              ${it.imp?'<span style="color:var(--gold);font-size:11px">⭐</span>':''}
-            </div>
-          </div>
-        </div>`).join('')}
-        ${items.length>12?`<p style="font-size:11px;color:rgba(255,255,255,.35);text-align:center;padding:8px 0">+ ${items.length-12} mais no Acervo</p>`:''}
-      </div>`;
-    })()}
-    `;
-  document.getElementById('ovScroll').scrollTop = 0;
-  document.getElementById('overlay').classList.add('open');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DEEP DIVE: AWARD
-   ═══════════════════════════════════════════════════════════ */
-function openAward(id){
-  const a = AWARDS.find(x=>x.id===id);
-  if(!a) return;
-  const hero = a.photoRonaldo || a.photoTrophy;
-
-  let photosHTML = '';
-  if(a.photoTrophy && a.photoRonaldo && a.photoTrophy!==a.photoRonaldo){
-    photosHTML = `<div class="aw-photos">
-      <div class="aw-photo"><img src="${a.photoTrophy}" alt=""><div class="cap">${LANG==='en'?'The trophy':LANG==='es'?'El trofeo':'O troféu'}</div></div>
-      <div class="aw-photo"><img src="${a.photoRonaldo}" alt=""><div class="cap">Ronaldo</div></div>
-    </div>`;
-  } else if(a.photoTrophy){
-    photosHTML = `<div class="aw-photos single"><div class="aw-photo" style="aspect-ratio:16/10"><img src="${a.photoTrophy}" alt=""></div></div>`;
-  }
-
-  const stars = a.rare ? '★'.repeat(a.rare) + '☆'.repeat(5-a.rare) : '';
-
-  document.getElementById('ovScroll').innerHTML = `
-    <div class="ov-hero" style="height:54vh">
-      ${hero?`<img src="${hero}" alt="" onclick="openZoom('award:${a.id}')">`:`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,rgba(253,211,6,.2),transparent 70%)"><div style="width:120px;height:120px" data-rr="${a.rrIcon}"></div></div>`}
-      <div class="grad"></div>
-      <div class="htext">
-        <span class="ac">${L(a.cat)} · ${a.year}</span>
-        <h1>${L(a.title)}</h1>
-      </div>
-    </div>
-    <div class="ov-body">
-      <div class="aw-meta">
-        ${a.org?`<div class="m"><div class="k">${LANG==='en'?'Awarded by':LANG==='es'?'Otorgado por':'Concedido por'}</div><div class="v">${a.org}</div></div>`:''}
-        <div class="m"><div class="k">${LANG==='en'?'Year':LANG==='es'?'Año':'Ano'}</div><div class="v">${a.year}</div></div>
-        ${stars?`<div class="m"><div class="k">${LANG==='en'?'Rarity':LANG==='es'?'Rareza':'Raridade'}</div><div class="v" style="color:var(--gold)">${stars}</div></div>`:''}
-      </div>
-      ${photosHTML}
-      <div class="aw-desc">${L(a.desc)||''}</div>
-    </div>`;
-  document.getElementById('ovScroll').scrollTop = 0;
-  document.getElementById('overlay').classList.add('open');
-}
-
-function closeOverlay(){ document.getElementById('overlay').classList.remove('open'); }
-
-/* ═══════════════════════════════════════════════════════════
-   ZOOM VIEWER
-   ═══════════════════════════════════════════════════════════ */
-let zScale=1;
-function openZoom(ref){
-  let src='';
-  if(ref.startsWith('award:')){
-    const a = AWARDS.find(x=>x.id===ref.split(':')[1]);
-    src = a.photoRonaldo||a.photoTrophy;
-  } else {
-    const p = PANELS.find(x=>x.id===ref); src = panelImg(p.id);
-  }
-  zScale=1;
-  const zi = document.getElementById('zoomImg');
-  zi.src = src; zi.style.transform='scale(1)';
-  document.getElementById('zoomer').classList.add('open');
-}
-function closeZoom(){ document.getElementById('zoomer').classList.remove('open'); }
-function zoomStep(d){ zScale=Math.max(1,Math.min(4,zScale+d*0.5));
-  document.getElementById('zoomImg').style.transform=`scale(${zScale})`; }
-document.getElementById('zoomImg').addEventListener('dblclick',()=>{
-  zScale = zScale>1?1:2.2;
-  document.getElementById('zoomImg').style.transform=`scale(${zScale})`;
-});
-
-/* ═══════════════════════════════════════════════════════════
-   RR ICONS (sprite) — for award fallbacks & nav
-   ═══════════════════════════════════════════════════════════ */
-function applyRRIcons(){
-  if(typeof RR_SPRITE==='undefined') return;
-  document.querySelectorAll('[data-rr]').forEach(el=>{
-    const key=el.getAttribute('data-rr'); if(!key||!ICONS_POS[key.replace('ico_','')])return;
-    const pos=ICONS_POS[key.replace('ico_','')];
-    const size=el.offsetWidth||80; const sc=(size*0.9)/110;
-    el.style.backgroundImage=`url(${RR_SPRITE})`;
-    el.style.backgroundSize=`${1122*sc}px ${1402*sc}px`;
-    el.style.backgroundPosition=`${-(pos[0]*sc-size/2)}px ${-(pos[1]*sc-size/2)}px`;
-    el.style.backgroundRepeat='no-repeat';
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════
-   NAVIGATION
-   ═══════════════════════════════════════════════════════════ */
-const screens = {home:'s-home',journey:'s-journey',arts:'s-arts',awards:'s-awards',acervo:'s-acervo',visit:'s-visit'};
-function go(key){
-  Object.values(screens).forEach(id=>document.getElementById(id).classList.remove('active'));
-  document.getElementById(screens[key]).classList.add('active');
-  document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.go===key));
-  document.getElementById(screens[key]).scrollTop=0;
-  if(key==='home') startHeroPan();
-}
-document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>go(n.dataset.go)));
-
-/* LANG SWITCH */
-document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>{
-  LANG=b.dataset.lang;
-  document.querySelectorAll('.lang').forEach(x=>x.classList.toggle('active',x===b));
-  renderAll();
-  if(document.getElementById('overlay').classList.contains('open') && currentChapter){
-    // keep overlay in sync if a chapter was open
-  }
-}));
-
-
-/* ─── HERO PAN (auto-rotate players every 5s) ─────────────── */
-let heroIdx=0, heroTimer=null;
-function panTo(i){
-  const strip=document.getElementById('heroStrip');
-  const pan=strip?strip.parentElement:null;
-  if(!strip||!pan) return;
-  const vw=pan.clientWidth, vh=pan.clientHeight;
-  const iw=strip.clientWidth || (vh*0.84*HERO.ratio);
-  const fx=HERO.players[i].x;
-  let tx=vw/2 - fx*iw;
-  tx=Math.min(0,Math.max(vw-iw,tx));
-  strip.style.transform=`translate(${tx}px,-50%)`;
-  // era label
-  const era=document.getElementById('heroEra');
-  if(era){
-    const pl=HERO.players[i];
-    era.querySelector('.yr').textContent=pl.yr;
-    era.querySelector('.club').textContent=(pl.club[LANG]||pl.club.pt);
-    era.classList.remove('show'); void era.offsetWidth; era.classList.add('show');
-  }
-  // dots
-  const dots=document.querySelectorAll('#heroDots .d');
-  dots.forEach((d,di)=>d.classList.toggle('on',di===i));
-}
-function startHeroPan(){
-  clearInterval(heroTimer); heroIdx=0;
-  // wait a tick for layout/image
-  setTimeout(()=>{ panTo(0); }, 120);
-  heroTimer=setInterval(()=>{ heroIdx=(heroIdx+1)%HERO.players.length; panTo(heroIdx); }, 5000);
-}
-
-function updateNavLabels(){
-  const map={home:'nav_home',journey:'nav_jrn',awards:'nav_aw',visit:'nav_vis'};
-  document.querySelectorAll('.nav').forEach(n=>{
-    const lb=n.querySelector('.nlb'); if(lb) lb.textContent=t(map[n.dataset.go]);
-  });
-}
-
-/* ─── HERO SWIPE ─────────────────────────────────────────────────────────── */
-function initHeroSwipe(){
-  const pan=document.querySelector('.hero-pan');
-  if(!pan||pan._swipe) return;
-  pan._swipe=true;
-  let tx=0, moved=false;
-  pan.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;moved=false;},{passive:true});
-  pan.addEventListener('touchmove',e=>{
-    const dx=e.touches[0].clientX-tx;
-    if(Math.abs(dx)>8) moved=true;
-  },{passive:true});
-  pan.addEventListener('touchend',e=>{
-    if(!moved) return;
-    const dx=e.changedTouches[0].clientX-tx;
-    if(Math.abs(dx)>40){
-      if(dx<0) heroIdx=(heroIdx+1)%HERO.players.length;
-      else heroIdx=(heroIdx-1+HERO.players.length)%HERO.players.length;
-      panTo(heroIdx);
-      clearInterval(heroTimer);
-      heroTimer=setInterval(()=>{heroIdx=(heroIdx+1)%HERO.players.length;panTo(heroIdx);},5000);
-    }
-  });
-}
-
-
-/* ─── RENDER ARTS ────────────────────────────────────────────────── */
-function renderArts(){
-  const arts=[
-    {id:'p00',title:{pt:'INTRO · FENÔMENO 50',en:'INTRO · PHENOMENON 50',es:'INTRO · FENÓMENO 50'}},
-    {id:'p02',title:{pt:'ATO 1 · A ORIGEM',en:'ACT 1 · THE ORIGIN',es:'ACTO 1 · EL ORIGEN'}},
-    {id:'p03',title:{pt:'ATO 2 · ASCENSÃO E QUEDA',en:'ACT 2 · RISE AND FALL',es:'ACTO 2 · ASCENSO Y CAÍDA'}},
-    {id:'p04',title:{pt:'A QUEDA E A VOLTA',en:'THE FALL AND THE RETURN',es:'LA CAÍDA Y EL REGRESO'}},
-    {id:'p05',title:{pt:'ATO 3 · O FENÔMENO',en:'ACT 3 · THE PHENOMENON',es:'ACTO 3 · EL FENÓMENO'}},
-    {id:'p06',title:{pt:'ATO 4 · O HOMEM',en:'ACT 4 · THE MAN',es:'ACTO 4 · EL HOMBRE'}},
-    {id:'p07',title:{pt:'ATO 5 · DE VOLTA PRA CASA',en:'ACT 5 · BACK HOME',es:'ACTO 5 · DE VUELTA A CASA'}},
-    {id:'p08',title:{pt:'50 ANOS · EM NOME DO NÓS',en:'50 YEARS · IN OUR NAME',es:'50 AÑOS · EN NOMBRE DE NOSOTROS'}},
-  ];
-  const el=document.getElementById('s-arts');
-  const pmap={};
-  PANELS.forEach(p=>pmap[p.id]=p);
-  el.innerHTML=`<div style="padding:22px 20px 12px;border-bottom:1px solid rgba(255,255,255,.07)">
-    <p class="eyebrow" style="margin-bottom:6px">★ GALERIA</p>
-    <h2 class="section-h" style="font-size:28px;font-family:'Anton'">ARTES EM ALTA</h2>
-    <p style="font-size:13px;color:rgba(255,255,255,.5);margin-top:4px">Toque para ver em tela cheia</p>
-  </div>
-  <div class="arts-grid">${arts.map(a=>{
-    const p=pmap[a.id];
-    if(!p) return '';
-    return `<div class="arts-card" onclick="openZoom('${a.id}_art')">
-      <img id="${a.id}_art" src="${panelImg(p.id)}" alt="${L(a.title)}" loading="lazy">
-      <div class="arts-label">${L(a.title)}</div>
-    </div>`;
-  }).join('')}
-  </div>
-  <div style="height:100px"></div>`;
-}
-
-/* ─── RENDER ACERVO ──────────────────────────────────────────────── */
-let acervoFilter='todos', acervoCol='all', acervoSearch='';
-const ATO_COLOR={'ato1':'#3B82F6','ato2':'#22C55E','ato3':'#F59E0B','ato4':'#A855F7','ato5':'#EC4899'};
-const ATO_LABEL={'ato1':'ATO 1','ato2':'ATO 2','ato3':'ATO 3','ato4':'ATO 4','ato5':'ATO 5'};
-
-function renderAcervo(){
-  const el=document.getElementById('s-acervo');
-  const items=ACERVO.items;
-  const temos=items.filter(i=>i.temos).length;
-  const faltam=items.filter(i=>!i.temos).length;
-  const ronald=items.filter(i=>i.col==='Rn').length;
-  const imp=items.filter(i=>i.imp).length;
-
-  // filter
-  let vis=items.filter(i=>{
-    const atoOk=acervoFilter==='todos'||i.ato===acervoFilter;
-    const colOk=acervoCol==='all'||(acervoCol==='R'&&i.col==='R')||(acervoCol==='Rn'&&i.col==='Rn')||(acervoCol==='imp'&&i.imp);
-    const srchOk=!acervoSearch||i.item.toLowerCase().includes(acervoSearch.toLowerCase());
-    return atoOk&&colOk&&srchOk;
-  });
-
-  const atoTabs=['todos','ato1','ato2','ato3','ato4','ato5'];
-  const colTabs=[{k:'all',l:'Tudo'},{k:'R',l:'Ronaldo'},{k:'Rn',l:'Ronald'},{k:'imp',l:'⭐ Destaque'}];
-
-  el.innerHTML=`
-  <div class="acervo-header">
-    <p class="eyebrow" style="margin-bottom:6px">★ INVENTÁRIO</p>
-    <h2 class="section-h" style="font-size:24px;font-family:'Anton';margin-bottom:12px">ACERVO COMPLETO</h2>
-    <div class="acervo-stats">
-      <div class="acervo-stat"><div class="n" style="color:#4eff8a">${temos}</div><div class="l">Temos</div></div>
-      <div class="acervo-stat"><div class="n" style="color:#ff7a7a">${faltam}</div><div class="l">Faltam</div></div>
-      <div class="acervo-stat"><div class="n" style="color:#8a8eff">${ronald}</div><div class="l">Ronald</div></div>
-      <div class="acervo-stat"><div class="n" style="color:var(--gold)">${imp}</div><div class="l">⭐</div></div>
-    </div>
-    <div class="acervo-filters">${atoTabs.map(k=>`<button class="af ${acervoFilter===k?'on':''}" onclick="setAcervoFilter('${k}')">${k==='todos'?'Todos':ATO_LABEL[k]}</button>`).join('')}</div>
-    <div class="acervo-filters">${colTabs.map(c=>`<button class="af ${acervoCol===c.k?'on':''}" onclick="setAcervoCol('${c.k}')">${c.l}</button>`).join('')}</div>
-    <div style="margin-top:8px;padding:0 0 4px">
-      <input type="text" placeholder="Buscar item..." value="${acervoSearch}" oninput="setAcervoSearch(this.value)"
-        style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-family:'Archivo';font-size:13px;outline:none;box-sizing:border-box">
-    </div>
-    <p style="font-size:11px;color:rgba(255,255,255,.35);margin-top:6px">${vis.length} de ${items.length} itens</p>
-  </div>
-  <div class="acervo-list">
-    ${vis.length?vis.map((i,idx)=>`
-    <div class="acervo-item">
-      <div class="acervo-item-num">${String(i.id).padStart(3,'0')}</div>
-      <div class="acervo-item-body">
-        <div class="acervo-item-name">${i.item}</div>
-        <div class="acervo-item-meta">
-          ${i.ano?`<span class="ai-year">${i.ano}</span>`:''}
-          <span class="ai-tag ai-col-${i.col}">${i.col==='R'?'Ronaldo':'Ronald'}</span>
-          <span class="ai-tag ${i.temos?'ai-ok':'ai-nok'}">${i.temos?'✓ temos':'✗ falta'}</span>
-          ${i.carta?`<span class="ai-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)">📜 ${i.carta}</span>`:''}
-          ${i.imp?'<span class="ai-imp">⭐</span>':''}
+        <div class="card-title">${L(ch.title)}</div>
+        <div class="card-narrator">
+          <span class="card-narrator-name">${L(ch.narrator)}</span>
+          <span style="color:rgba(255,255,255,.2)">·</span>
+          <span class="card-narrator-role">${L(ch.role)}</span>
+          <span class="card-arrow">›</span>
         </div>
-        ${i.nota?`<div class="acervo-item-nota">${i.nota}</div>`:''}
       </div>
-    </div>`).join(''):'<div class="acervo-empty">Nenhum item encontrado</div>'}
-    <div style="height:80px"></div>
-  </div>`;
+    </div>
+  `).join('');
 }
 
-function setAcervoFilter(f){acervoFilter=f;renderAcervo()}
-function setAcervoCol(c){acervoCol=c;renderAcervo()}
-function setAcervoSearch(v){acervoSearch=v;renderAcervo()}
+function showDetail(idx){
+  currentIdx = idx;
+  const ch = CHAPTERS[idx];
+  
+  document.getElementById('detail-img').src = ch.img;
+  document.getElementById('detail-img-label').textContent = L(ch.title) + (ch.years ? ' · ' + ch.years : '');
+  document.getElementById('detail-ato').textContent = L(ch.tag);
+  document.getElementById('detail-years').textContent = ch.years;
+  document.getElementById('detail-title').textContent = L(ch.title);
+  document.getElementById('detail-narrator').textContent = L(ch.narrator);
+  document.getElementById('detail-role').textContent = L(ch.role);
+  document.getElementById('lbl-wall').textContent = LABELS[LANG].wall;
+  
+  // Render text paragraphs
+  const text = L(ch.text);
+  document.getElementById('detail-text').innerHTML = text
+    .split('\n\n')
+    .map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`)
+    .join('');
+  
+  // Nav buttons
+  const prev = CHAPTERS[idx-1];
+  const next = CHAPTERS[idx+1];
+  document.getElementById('btn-prev').disabled = !prev;
+  document.getElementById('btn-next').disabled = !next;
+  document.getElementById('prev-title').textContent = prev ? L(prev.title) : '';
+  document.getElementById('next-title').textContent = next ? L(next.title) : '';
+  
+  // Show/hide views
+  document.getElementById('view-list').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+  window.scrollTo(0,0);
+}
 
-function renderAll(){ renderHome(); renderJourney(); renderArts(); renderAcervo(); renderAwards(); renderVisit(); updateNavLabels(); startHeroPan(); setTimeout(initHeroSwipe,300); }
+function showList(){
+  document.getElementById('view-list').style.display = 'block';
+  document.getElementById('view-detail').style.display = 'none';
+  window.scrollTo(0,0);
+}
 
-/* INIT */
-(function(){
-  function init(){
-    renderAll();
-    setTimeout(function(){ var s=document.getElementById('splash'); if(s) s.classList.add('hide'); }, 800);
-  }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
+function navChapter(dir){
+  const newIdx = currentIdx + dir;
+  if(newIdx >= 0 && newIdx < CHAPTERS.length) showDetail(newIdx);
+}
+
+// Init
+renderList();
+setTimeout(()=>{ document.getElementById('splash').classList.add('hide'); }, 600);
 </script>
-
-<!-- IMAGENS PRÉ-CARREGADAS (fora do script) -->
-<img id="pimg_p00" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p00.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p02" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p02.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p03" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p03.jpg" loading="lazy" style="display:none" alt="">
-<img id="pthumb_p03" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pthumb_p03.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p04" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p04.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p05" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p05.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p06" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p06.jpg" loading="lazy" style="display:none" alt="">
-<img id="pthumb_p06" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pthumb_p06.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p07" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p07.jpg" loading="lazy" style="display:none" alt="">
-<img id="pimg_p08" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/pimg_p08.jpg" loading="lazy" style="display:none" alt="">
-<img id="hero_img" src="https://brunodeluca-alt.github.io/fenomeno50/imgs/hero_img.jpg" loading="lazy" style="display:none" alt="">
 </body>
 </html>
