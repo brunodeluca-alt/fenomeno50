@@ -88,7 +88,7 @@ body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-s
 .acervo-list{padding:0 16px 40px}
 .agroup{margin-top:20px}
 .agroup-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;padding:10px 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px}
-.aitem{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.aitem{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
 .aitem-num{font-size:10px;color:rgba(255,255,255,.2);min-width:26px;padding-top:2px;font-weight:600}
 .aitem-body{flex:1}
 .aitem-name{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:4px}
@@ -251,6 +251,8 @@ body{background:#0A0A0A !important;color:#ffffff !important;font-family:-apple-s
 
 <script>
 const IMG = 'https://brunodeluca-alt.github.io/fenomeno50/imgs';
+const ITEM_IMG = 'https://brunodeluca-alt.github.io/fenomeno50-ops/images';
+const HAS_IMG = new Set([3,16,17,18,19,20,31,32,33,34,35,36,37,38,43,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,80,82,83,88,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124]);
 const CHAPTERS = [
   {id:'entrada',img:IMG+'/pimg_p00.jpg',
    tag:{pt:'FACHADA',en:'ENTRANCE',es:'ENTRADA'},years:'',
@@ -486,14 +488,31 @@ function renderItem(i){
   if(i.ano) tags.push(`<span style="font-size:10px;color:var(--muted)">${i.ano}</span>`);
   const star=i.imp?`<span class="tag-imp">⭐</span>`:'';
   const nota=i.nota?`<div class="aitem-nota">⚠ ${i.nota}</div>`:'';
-  return `<div class="aitem">
-    <div class="aitem-num">#${String(i.id).padStart(3,'0')}</div>
-    <div class="aitem-body">
+  const hasImg=HAS_IMG.has(i.id);
+  const imgBox=hasImg
+    ?`<div class="aitem-img" onclick="event.stopPropagation();openItemPhoto(${i.id})" title="Ver foto"><img src="${ITEM_IMG}/${i.id}.jpg" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:6px;cursor:zoom-in;"></div>`
+    :`<div class="aitem-img" style="width:44px;height:44px;border-radius:6px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📷</div>`;
+  return `<div class="aitem" style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px">
+    ${imgBox}
+    <div style="flex:1;min-width:0">
+      <div class="aitem-num">#${String(i.id).padStart(3,'0')}</div>
       <div class="aitem-name">${i.item} ${star}</div>
       <div class="aitem-meta">${tags.join('')}</div>
       ${nota}
     </div>
   </div>`;
+}
+
+function openItemPhoto(id){
+  const popup=document.getElementById('pin-popup');
+  document.getElementById('pin-num').textContent='PEÇA Nº'+String(id).padStart(3,'0');
+  const item=ACERVO_ITEMS.find(i=>i.id===id);
+  document.getElementById('pin-name').textContent=item?item.item:'';
+  const imgBox=document.getElementById('pin-img-box');
+  if(imgBox) imgBox.innerHTML=`<img src="${ITEM_IMG}/${id}.jpg" style="width:100%;max-height:260px;object-fit:contain;border-radius:8px;background:#000;display:block;margin-bottom:12px">`;
+  document.getElementById('pin-tags').innerHTML=item?`<span style="color:var(--gold);font-size:12px">${item.ano||''}</span>`:'';
+  document.getElementById('pin-nota').textContent=item&&item.nota?item.nota:'';
+  popup.style.display='flex';
 }
 
 
@@ -521,6 +540,10 @@ function openPin(pin, num) {
   const popup = document.getElementById('pin-popup');
   document.getElementById('pin-num').textContent = 'PEÇA Nº' + String(pin.id).padStart(3,'0');
   document.getElementById('pin-name').textContent = pin.name;
+  const imgBox=document.getElementById('pin-img-box');
+  if(imgBox) imgBox.innerHTML=HAS_IMG.has(pin.id)
+    ?`<img src="${ITEM_IMG}/${pin.id}.jpg" style="width:100%;max-height:260px;object-fit:contain;border-radius:8px;background:#000;display:block;margin-bottom:12px">`
+    :'';
   
   const tags = [];
   if (pin.imp) tags.push('<span style="background:rgba(253,206,6,.2);color:#FDCE06;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">⭐ DESTAQUE</span>');
@@ -553,6 +576,7 @@ setTimeout(()=>document.getElementById('splash').classList.add('hide'), 600);
   <div class="pin-sheet">
     <div class="pin-sheet-handle"></div>
     <button class="pin-close" onclick="document.getElementById('pin-popup').style.display='none'">✕</button>
+    <div id="pin-img-box"></div>
     <div class="pin-sheet-num" id="pin-num"></div>
     <div class="pin-sheet-name" id="pin-name"></div>
     <div class="pin-sheet-meta" id="pin-meta"></div>
